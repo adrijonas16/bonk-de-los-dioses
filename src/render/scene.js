@@ -53,7 +53,7 @@ if (!GL_OK) {
 }
 bindPointer(cv);
 cv.addEventListener('click', () => {
-  if (state === 'play' && !isTouch && !document.pointerLockElement) {
+  if (state === 'play' && !isTouch && !document.pointerLockElement && !(G && G.mapOpen)) {
     try {
       const r = cv.requestPointerLock();
       if (r && r.catch) r.catch(() => {});

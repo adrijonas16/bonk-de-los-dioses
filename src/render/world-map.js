@@ -51,16 +51,208 @@ function toggleWorldMap(open) {
   const b = $('mapBtn');
   if (b) b.setAttribute('aria-pressed', G.mapOpen ? 'true' : 'false');
   document.body.classList.toggle('map-open', !!G.mapOpen);
+  // con el mapa abierto se necesita el cursor para señalar y marcar
+  if (G.mapOpen && document.pointerLockElement)
+    try {
+      document.exitPointerLock();
+    } catch (err) {}
+}
+// tipos de lugar: icono propio, nombre y qué hace (se ve en la leyenda y al pasar el ratón)
+const MAP_KINDS = {
+  chest: {
+    name: 'Cofre',
+    col: '#c98a3a',
+    tip: (o) => (o.free ? 'Cofre gratis: ábrelo con E' : `Cofre: ábrelo con E por ${chestPrice()} de oro`),
+  },
+  rich: { name: 'Cofre rico', col: '#ffd34d', tip: () => 'Cofre rico: objetos raros o mejores' },
+  altar: { name: 'Altar de don', col: '#e8b53e', tip: () => 'Altar: quédate dentro hasta cargarlo y ganas un don' },
+  fortuna: {
+    name: 'Altar de la Fortuna',
+    col: '#ffc23a',
+    tip: (o) => `Fortuna: paga ${shrinePrice(o)} de oro por un objeto`,
+  },
+  desafio: {
+    name: 'Estatua del Desafío',
+    col: '#ff4d5e',
+    tip: () => 'Desafío: llama a una horda; si la vences, cofre rico',
+  },
+  fuente: { name: 'Fuente Sagrada', col: '#4fc3ff', tip: () => 'Fuente: te cura toda la vida (una vez)' },
+  maldito: { name: 'Altar Maldito', col: '#9b5cff', tip: () => 'Maldito: enemigos más duros a cambio de más premio' },
+  merchant: { name: 'Mercader', col: '#3ccf6e', tip: () => 'Mercader: compra objetos con tu oro' },
+  boss: { name: 'Jefe', col: '#ff4d5e', tip: (o) => `${o.d.name}: ¡derrótalo!` },
+  portal: { name: 'Portal', col: '#b06cff', tip: (o) => `Portal a ${REALMS[o.key].name}` },
+  mark: { name: 'Tu marca', col: '#7de0ff', tip: () => 'Tu marca: toca de nuevo para quitarla' },
+  me: { name: 'Tú', col: '#ffffff', tip: () => 'Tú' },
+};
+// iconos dibujados a mano (todos distintos, con borde negro para leerse sobre cualquier terreno)
+function mapIcon(g, kind, a, b, s) {
+  const K = MAP_KINDS[kind];
+  g.save();
+  g.translate(a, b);
+  g.lineJoin = 'round';
+  g.lineWidth = 2;
+  g.strokeStyle = '#120c08';
+  const circ = (r, fill) => {
+    g.fillStyle = fill;
+    g.beginPath();
+    g.arc(0, 0, r, 0, 6.283);
+    g.fill();
+    g.stroke();
+  };
+  const glyph = (t, col, size) => {
+    g.fillStyle = col;
+    g.font = `900 ${size}px Nunito, sans-serif`;
+    g.textAlign = 'center';
+    g.textBaseline = 'middle';
+    g.fillText(t, 0, 1);
+  };
+  switch (kind) {
+    case 'chest':
+    case 'rich': {
+      const w = s * 1.1,
+        h = s * 0.8;
+      g.fillStyle = K.col;
+      g.fillRect(-w / 2, -h / 2, w, h);
+      g.strokeRect(-w / 2, -h / 2, w, h);
+      g.beginPath();
+      g.moveTo(-w / 2, -h / 8);
+      g.lineTo(w / 2, -h / 8);
+      g.stroke();
+      g.fillStyle = kind === 'rich' ? '#fff6c8' : '#ffd34d';
+      g.fillRect(-2, -h / 8 - 2, 4, 5);
+      break;
+    }
+    case 'altar':
+      g.fillStyle = '#6a5a4a';
+      g.fillRect(-s * 0.55, s * 0.15, s * 1.1, s * 0.4);
+      g.strokeRect(-s * 0.55, s * 0.15, s * 1.1, s * 0.4);
+      g.fillStyle = K.col;
+      g.beginPath();
+      g.moveTo(0, -s * 0.75);
+      g.lineTo(s * 0.4, -s * 0.2);
+      g.lineTo(0, s * 0.2);
+      g.lineTo(-s * 0.4, -s * 0.2);
+      g.closePath();
+      g.fill();
+      g.stroke();
+      break;
+    case 'fortuna':
+      circ(s * 0.62, K.col);
+      glyph('★', '#5a3a00', s * 0.85);
+      break;
+    case 'desafio':
+      circ(s * 0.62, K.col);
+      glyph('⚔', '#fff', s * 0.8);
+      break;
+    case 'fuente':
+      circ(s * 0.62, K.col);
+      g.fillStyle = '#fff';
+      g.beginPath();
+      g.moveTo(0, -s * 0.4);
+      g.quadraticCurveTo(s * 0.32, 0, 0, s * 0.35);
+      g.quadraticCurveTo(-s * 0.32, 0, 0, -s * 0.4);
+      g.fill();
+      break;
+    case 'maldito':
+      circ(s * 0.62, K.col);
+      glyph('✶', '#fff', s * 0.85);
+      break;
+    case 'merchant':
+      g.fillStyle = '#9a6a3a';
+      g.beginPath();
+      g.moveTo(-s * 0.35, -s * 0.35);
+      g.quadraticCurveTo(-s * 0.7, s * 0.2, -s * 0.4, s * 0.55);
+      g.lineTo(s * 0.4, s * 0.55);
+      g.quadraticCurveTo(s * 0.7, s * 0.2, s * 0.35, -s * 0.35);
+      g.closePath();
+      g.fill();
+      g.stroke();
+      glyph('$', '#ffd34d', s * 0.65);
+      break;
+    case 'boss':
+      circ(s * 0.75, K.col);
+      glyph('☠', '#fff', s * 1.05);
+      break;
+    case 'portal':
+      g.lineWidth = 4;
+      g.strokeStyle = '#120c08';
+      g.beginPath();
+      g.ellipse(0, 0, s * 0.45, s * 0.7, 0, 0, 6.283);
+      g.stroke();
+      g.lineWidth = 2.5;
+      g.strokeStyle = K.col;
+      g.stroke();
+      break;
+    case 'mark':
+      g.fillStyle = K.col;
+      g.beginPath();
+      g.moveTo(-s * 0.15, s * 0.7);
+      g.lineTo(-s * 0.15, -s * 0.7);
+      g.lineTo(s * 0.6, -s * 0.42);
+      g.lineTo(-s * 0.15, -s * 0.14);
+      g.stroke();
+      g.fill();
+      break;
+  }
+  g.restore();
+}
+// lista de lugares visibles en el mapa (para dibujarlos, la leyenda y el ratón)
+function mapPlaces() {
+  const out = [];
+  for (const ch of WORLD.chests)
+    if (!ch.opened) out.push({ kind: ch.rich ? 'rich' : 'chest', o: ch, x: ch.x, y: ch.y });
+  for (const al of WORLD.altars) if (!al.used) out.push({ kind: 'altar', o: al, x: al.x, y: al.y });
+  for (const sh of WORLD.shrines) if (!sh.used) out.push({ kind: sh.type, o: sh, x: sh.x, y: sh.y });
+  for (const m of WORLD.merchants) out.push({ kind: 'merchant', o: m, x: m.x, y: m.y });
+  if (G.portals) for (const pt of G.portals) out.push({ kind: 'portal', o: pt, x: pt.x, y: pt.y });
+  for (const e of G.bosses) out.push({ kind: 'boss', o: e, x: e.x, y: e.y });
+  if (G.mark) out.push({ kind: 'mark', o: G.mark, x: G.mark.x, y: G.mark.y });
+  return out;
+}
+const MAPUI = { mx: -1, my: -1, geo: null };
+function mapGeo(W, H) {
+  const S = Math.min(W, H) * 0.86;
+  return { S, R: S / 2, cx: W / 2, cy: (H - S) / 2 + 10 + S / 2 };
+}
+function mapToWorld(px, py) {
+  const m = MAPUI.geo;
+  if (!m) return null;
+  const dx = px - m.cx,
+    dy = py - m.cy;
+  if (Math.hypot(dx, dy) > m.R) return null;
+  return [(dx / m.R) * ARENA, (dy / m.R) * ARENA];
+}
+// clic en el mapa: marca o quita la marca; fuera del círculo cierra
+function mapClick(px, py) {
+  const w = mapToWorld(px, py);
+  if (!w) return toggleWorldMap(false);
+  const m = MAPUI.geo,
+    sc = m.R / ARENA;
+  if (G.mark && Math.hypot(G.mark.x - w[0], G.mark.y - w[1]) * sc < 14) G.mark = null;
+  else {
+    // si tocas cerca de un lugar, la marca se pone justo encima
+    let best = null,
+      bd = 14 / sc;
+    for (const pl of mapPlaces()) {
+      if (pl.kind === 'mark') continue;
+      const d = Math.hypot(pl.x - w[0], pl.y - w[1]);
+      if (d < bd) {
+        bd = d;
+        best = pl;
+      }
+    }
+    G.mark = best
+      ? { x: best.x, y: best.y, label: MAP_KINDS[best.kind].name }
+      : { x: w[0], y: w[1], label: 'Tu marca' };
+  }
 }
 function drawWorldMap(g, W, H) {
-  const S = Math.min(W, H) * 0.86,
-    ox = (W - S) / 2,
-    oy = (H - S) / 2 + 10,
-    R = S / 2;
-  g.fillStyle = 'rgba(6,8,16,.72)';
+  const geo = (MAPUI.geo = mapGeo(W, H)),
+    { S, R, cx, cy } = geo,
+    ox = cx - R,
+    oy = cy - R;
+  g.fillStyle = 'rgba(6,8,16,.74)';
   g.fillRect(0, 0, W, H);
-  const cx = ox + R,
-    cy = oy + R;
   g.save();
   g.beginPath();
   g.arc(cx, cy, R, 0, 6.283);
@@ -73,61 +265,99 @@ function drawWorldMap(g, W, H) {
   g.beginPath();
   g.arc(cx, cy, R + 2, 0, 6.283);
   g.stroke();
-  // norte arriba, igual que el mundo visto con la cámara sin girar
   const P = (x, y) => [cx + (x / ARENA) * R, cy + (y / ARENA) * R];
-  const dot = (x, y, r, fill, stroke) => {
-    const [a, b] = P(x, y);
-    g.fillStyle = fill;
-    g.beginPath();
-    g.arc(a, b, r, 0, 6.283);
-    g.fill();
-    if (stroke) {
-      g.strokeStyle = stroke;
-      g.lineWidth = 2;
-      g.stroke();
-    }
-  };
-  const sq = (x, y, r, fill) => {
-    const [a, b] = P(x, y);
-    g.fillStyle = '#000';
-    g.fillRect(a - r - 1.5, b - r - 1.5, r * 2 + 3, r * 2 + 3);
-    g.fillStyle = fill;
-    g.fillRect(a - r, b - r, r * 2, r * 2);
-  };
-  const icon = (x, y, ch, col, size) => {
-    const [a, b] = P(x, y);
-    g.font = `900 ${size || 16}px Nunito, sans-serif`;
-    g.textAlign = 'center';
-    g.textBaseline = 'middle';
-    g.lineWidth = 4;
-    g.strokeStyle = '#000';
-    g.strokeText(ch, a, b);
-    g.fillStyle = col;
-    g.fillText(ch, a, b);
-  };
   for (let i = 0; i < enemies.length; i += 3) {
     const e = enemies[i];
-    if (!e.boss) dot(e.x, e.y, 1.6, 'rgba(255,110,110,.7)');
+    if (e.boss) continue;
+    const [a, b] = P(e.x, e.y);
+    g.fillStyle = 'rgba(255,110,110,.65)';
+    g.fillRect(a - 1, b - 1, 2.5, 2.5);
   }
-  for (const ch of WORLD.chests) if (!ch.opened) sq(ch.x, ch.y, ch.rich ? 6 : 4, ch.rich ? '#ffd34d' : '#c98a3a');
-  for (const al of WORLD.altars) if (!al.used) icon(al.x, al.y, '◆', C.gold, 15);
-  for (const sh of WORLD.shrines) if (!sh.used) icon(sh.x, sh.y, '▲', SHRINE_T[sh.type].col, 15);
-  for (const m of WORLD.merchants) icon(m.x, m.y, '$', '#7dffa8', 17);
   if (typeof questsOverlay === 'function') questsOverlay(g, P);
-  if (G.portals) for (const pt of G.portals) dot(pt.x, pt.y, 9, REALMS[pt.key].acc, '#fff');
-  for (const e of G.bosses) icon(e.x, e.y, '☠', '#ff4d5e', 24);
-  for (const r of remotesHere()) dot(r.x, r.y, 6, '#7dffb0', '#000');
-  for (const p of players) {
-    dot(p.x, p.y, 7, p.col, '#000');
-    const [a, b] = P(p.x, p.y);
-    g.strokeStyle = '#fff';
+  const places = mapPlaces();
+  let hover = null,
+    hd = 16;
+  for (const pl of places) {
+    const [a, b] = P(pl.x, pl.y);
+    mapIcon(g, pl.kind, a, b, pl.kind === 'boss' ? 22 : 15);
+    const d = Math.hypot(a - MAPUI.mx, b - MAPUI.my);
+    if (d < hd) {
+      hd = d;
+      hover = { pl, a, b };
+    }
+  }
+  // línea hasta la marca
+  const me = players.find((p) => p.ctrl === 'p1') || players[0];
+  if (G.mark && me) {
+    const [a1, b1] = P(me.x, me.y),
+      [a2, b2] = P(G.mark.x, G.mark.y);
+    g.setLineDash([6, 6]);
+    g.strokeStyle = '#7de0ff';
     g.lineWidth = 2;
     g.beginPath();
-    g.moveTo(a, b);
-    g.lineTo(a + p.fx * 14, b + p.fy * 14);
+    g.moveTo(a1, b1);
+    g.lineTo(a2, b2);
+    g.stroke();
+    g.setLineDash([]);
+  }
+  for (const r of remotesHere()) {
+    const [a, b] = P(r.x, r.y);
+    g.fillStyle = '#7dffb0';
+    g.beginPath();
+    g.arc(a, b, 6, 0, 6.283);
+    g.fill();
+    g.strokeStyle = '#000';
     g.stroke();
   }
-  // título y leyenda
+  for (const p of players) {
+    const [a, b] = P(p.x, p.y),
+      ang = Math.atan2(p.fy, p.fx);
+    g.save();
+    g.translate(a, b);
+    g.rotate(ang);
+    g.fillStyle = p.col;
+    g.strokeStyle = '#000';
+    g.lineWidth = 2;
+    g.beginPath();
+    g.moveTo(11, 0);
+    g.lineTo(-7, 7);
+    g.lineTo(-3, 0);
+    g.lineTo(-7, -7);
+    g.closePath();
+    g.fill();
+    g.stroke();
+    g.restore();
+  }
+  // etiqueta al pasar el ratón
+  if (hover) {
+    const K = MAP_KINDS[hover.pl.kind],
+      t1 = K.name,
+      t2 = K.tip(hover.pl.o),
+      d = me ? Math.round(Math.hypot(hover.pl.x - me.x, hover.pl.y - me.y) / 10) : 0;
+    g.font = '900 14px Nunito, sans-serif';
+    const w1 = g.measureText(t1 + ' · 000 m').width;
+    g.font = '700 12px Nunito, sans-serif';
+    const w = Math.max(w1, g.measureText(t2).width) + 24;
+    let x = hover.a + 14,
+      y = hover.b - 44;
+    if (x + w > W - 8) x = hover.a - w - 14;
+    if (y < 8) y = hover.b + 14;
+    g.fillStyle = 'rgba(16,18,32,.95)';
+    roundRect(g, x, y, w, 46, 10);
+    g.fill();
+    g.strokeStyle = K.col;
+    g.lineWidth = 2;
+    g.stroke();
+    g.textAlign = 'left';
+    g.textBaseline = 'top';
+    g.fillStyle = K.col;
+    g.font = '900 14px Nunito, sans-serif';
+    g.fillText(`${t1} · ${d} m`, x + 12, y + 7);
+    g.fillStyle = '#e8ecff';
+    g.font = '700 12px Nunito, sans-serif';
+    g.fillText(t2, x + 12, y + 26);
+  }
+  // título
   g.textAlign = 'center';
   g.textBaseline = 'top';
   g.font = '900 22px Nunito, sans-serif';
@@ -141,7 +371,7 @@ function drawWorldMap(g, W, H) {
   const sub = nx
     ? `${BOSSES[nx.key].tier === 'mini' ? 'Minijefe' : BOSSES[nx.key].tier === 'final' ? 'Jefe final' : 'Jefe'}: ${BOSSES[nx.key].name} en ${fmt(nx.t - G.rt)}`
     : G.bosses.length
-      ? '¡Jefe en el mapa! (☠)'
+      ? '¡Hay un jefe en el mapa!'
       : G.portals
         ? 'Portales abiertos'
         : '';
@@ -149,34 +379,111 @@ function drawWorldMap(g, W, H) {
   g.strokeText(sub, W / 2, 38);
   g.fillStyle = '#ffd34d';
   g.fillText(sub, W / 2, 38);
-  const L = [
-    ['■', '#c98a3a', 'Cofre'],
-    ['■', '#ffd34d', 'Cofre rico'],
-    ['◆', C.gold, 'Altar de don'],
-    ['▲', '#ffc23a', 'Santuario'],
-    ['$', '#7dffa8', 'Mercader'],
-    ['☠', '#ff4d5e', 'Jefe'],
-    ['●', '#fff', 'Tú'],
+  // leyenda con el icono real de cada lugar y cuántos quedan
+  const count = {};
+  for (const pl of places) count[pl.kind] = (count[pl.kind] || 0) + 1;
+  const order = [
+    'chest',
+    'rich',
+    'altar',
+    'fortuna',
+    'desafio',
+    'fuente',
+    'maldito',
+    'merchant',
+    'boss',
+    'portal',
+    'mark',
   ];
-  g.font = '800 13px Nunito, sans-serif';
+  const rows = order.filter((k) => count[k] || k === 'mark');
+  const lw = W > 760 ? 210 : 170,
+    lh = 26,
+    lx = 14,
+    ly0 = Math.max(70, H / 2 - (rows.length * lh) / 2);
+  g.fillStyle = 'rgba(16,18,32,.85)';
+  roundRect(g, lx - 6, ly0 - 34, lw, rows.length * lh + 44, 12);
+  g.fill();
   g.textAlign = 'left';
   g.textBaseline = 'middle';
-  let lx = 16,
-    ly = H - 22 - (L.length - 1) * 20;
-  if (W > 700) ly = H / 2 - (L.length * 20) / 2;
-  for (const [ch, col, name] of L) {
-    g.fillStyle = col;
-    g.strokeStyle = '#000';
-    g.lineWidth = 3;
-    g.strokeText(ch, lx, ly);
-    g.fillText(ch, lx, ly);
+  g.fillStyle = '#ffd34d';
+  g.font = '900 12px Nunito, sans-serif';
+  g.fillText('LEYENDA', lx + 4, ly0 - 18);
+  rows.forEach((k, i) => {
+    const y = ly0 + i * lh;
+    mapIcon(g, k, lx + 14, y, 15);
     g.fillStyle = '#fff';
-    g.strokeText(name, lx + 20, ly);
-    g.fillText(name, lx + 20, ly);
-    ly += 20;
-  }
+    g.font = '800 13px Nunito, sans-serif';
+    g.fillText(MAP_KINDS[k].name, lx + 32, y);
+    if (count[k] && k !== 'mark') {
+      g.fillStyle = '#9aa3c7';
+      g.textAlign = 'right';
+      g.fillText('×' + count[k], lx + lw - 18, y);
+      g.textAlign = 'left';
+    }
+  });
   g.textAlign = 'center';
+  g.textBaseline = 'alphabetic';
   g.font = '800 12px Nunito, sans-serif';
-  g.fillStyle = '#9aa3c7';
-  g.fillText(G.online ? 'M o Esc para cerrar' : 'Partida en pausa · M o Esc para cerrar', W / 2, H - 14);
+  g.fillStyle = '#c8d0f0';
+  g.fillText(
+    (G.online ? '' : 'Partida en pausa · ') + 'Toca el mapa para poner una marca · M o Esc para cerrar',
+    W / 2,
+    H - 12
+  );
+}
+// marca en el mundo: columna de luz, flecha en el borde de la pantalla y distancia
+function drawMarkHint(g, W, H) {
+  if (!G.mark || G.mapOpen) return;
+  const me = players.find((p) => p.ctrl === 'p1') || players[0];
+  if (!me) return;
+  const d = Math.hypot(G.mark.x - me.x, G.mark.y - me.y);
+  if (d < 50) {
+    G.mark = null;
+    return;
+  }
+  const s = toScreen(G.mark.x, G.mark.y, groundAt(G.mark.x, G.mark.y) + 40);
+  const label = `${G.mark.label} · ${Math.round(d / 10)} m`;
+  g.font = '900 13px Nunito, sans-serif';
+  g.textAlign = 'center';
+  g.lineWidth = 4;
+  g.strokeStyle = '#000';
+  if (s && s[0] > 30 && s[0] < W - 30 && s[1] > 30 && s[1] < H - 30) {
+    mapIcon(g, 'mark', s[0], s[1] - 10, 18);
+    g.strokeText(label, s[0], s[1] + 16);
+    g.fillStyle = '#7de0ff';
+    g.fillText(label, s[0], s[1] + 16);
+    return;
+  }
+  // fuera de pantalla: flecha en el borde en la dirección de la marca
+  const ps = toScreen(me.x, me.y, me.z + 20) || [W / 2, H / 2];
+  let ang;
+  if (s) ang = Math.atan2(s[1] - ps[1], s[0] - ps[0]);
+  else {
+    const dx = G.mark.x - me.x,
+      dy = G.mark.y - me.y,
+      c = Math.cos(G.yaw),
+      sn = Math.sin(G.yaw);
+    ang = Math.atan2(dx * sn + dy * c, dx * c - dy * sn);
+  }
+  const r = Math.min(W, H) * 0.42,
+    ax = W / 2 + Math.cos(ang) * r,
+    ay = H / 2 + Math.sin(ang) * r;
+  g.save();
+  g.translate(ax, ay);
+  g.rotate(ang);
+  g.fillStyle = '#7de0ff';
+  g.strokeStyle = '#000';
+  g.lineWidth = 2;
+  g.beginPath();
+  g.moveTo(16, 0);
+  g.lineTo(-8, 10);
+  g.lineTo(-3, 0);
+  g.lineTo(-8, -10);
+  g.closePath();
+  g.fill();
+  g.stroke();
+  g.restore();
+  g.strokeText(label, ax, ay + 26);
+  g.fillStyle = '#7de0ff';
+  g.fillText(label, ax, ay + 26);
 }

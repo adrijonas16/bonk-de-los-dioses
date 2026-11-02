@@ -235,6 +235,7 @@ function drawOverlay() {
     g.lineWidth = 1;
     g.stroke();
   }
+  drawMarkHint(g, W, H);
   if (G.mapOpen) drawWorldMap(g, W, H);
   if (joy) {
     g.strokeStyle = 'rgba(242,227,198,.6)';

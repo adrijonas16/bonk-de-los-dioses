@@ -126,15 +126,24 @@ $('mapBtn').onclick = (ev) => {
   ev.stopPropagation();
   toggleWorldMap();
 };
-// tocar el minimapa también abre el mapa grande; tocar fuera lo cierra
+// tocar el minimapa abre el mapa grande; con el mapa abierto, tocar pone o quita una marca
 $('c').addEventListener('pointerdown', (ev) => {
   if (!G || (state !== 'play' && !G.mapOpen)) return;
   const r = $('c').getBoundingClientRect(),
     x = ev.clientX - r.left,
     y = ev.clientY - r.top,
     mmR = Math.min(78, r.width * 0.09);
-  if (G.mapOpen || Math.hypot(x - (r.width - mmR - 18), y - (mmR + 18)) < mmR + 6) {
+  if (G.mapOpen) {
     ev.stopImmediatePropagation();
-    toggleWorldMap();
+    mapClick(x, y);
+  } else if (Math.hypot(x - (r.width - mmR - 18), y - (mmR + 18)) < mmR + 6) {
+    ev.stopImmediatePropagation();
+    toggleWorldMap(true);
   }
+});
+$('c').addEventListener('pointermove', (ev) => {
+  if (!G || !G.mapOpen) return;
+  const r = $('c').getBoundingClientRect();
+  MAPUI.mx = ev.clientX - r.left;
+  MAPUI.my = ev.clientY - r.top;
 });
