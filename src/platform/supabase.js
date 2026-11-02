@@ -26,7 +26,10 @@
       alert('Falta configurar Supabase (config.js).');
       return;
     }
-    sb.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: location.origin + location.pathname } });
+    sb.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: location.origin + location.pathname + location.search },
+    });
   };
   window.SB_LOGOUT = async () => {
     if (!sb) return;
@@ -40,20 +43,96 @@
       }
     });
 
+  /* ---- perfil y amigos (solo versión web) ---- */
+  const uidP = () => session().then((s) => (s ? s.user.id : null));
+  const sel = (q) =>
+    q.then(({ data, error }) => {
+      if (error) throw error;
+      return data;
+    });
+  window.SBX = {
+    available: () => !!sb,
+    myProfile: async () => {
+      const id = await uidP();
+      if (!id) return null;
+      return sel(sb.from('profiles').select('id,name,code,avatar').eq('id', id).maybeSingle());
+    },
+    setName: async (name) => {
+      const id = await uidP();
+      const clean = String(name || '')
+        .trim()
+        .slice(0, 24);
+      if (!id || clean.length < 2) throw new Error('El nombre debe tener al menos 2 letras.');
+      await sel(
+        sb.from('profiles').update({ name: clean, updated_at: new Date().toISOString() }).eq('id', id).select('id')
+      );
+      return clean;
+    },
+    findByCode: async (code) =>
+      sel(
+        sb
+          .from('profiles')
+          .select('id,name,code')
+          .eq(
+            'code',
+            String(code || '')
+              .trim()
+              .toUpperCase()
+          )
+          .maybeSingle()
+      ),
+    addFriend: async (fid) => {
+      const id = await uidP();
+      if (!id || fid === id) throw new Error('No puedes añadirte a ti mismo.');
+      await sel(
+        sb
+          .from('friends')
+          .upsert({ user_id: id, friend_id: fid }, { onConflict: 'user_id,friend_id', ignoreDuplicates: true })
+          .select('friend_id')
+      );
+    },
+    removeFriend: async (fid) => {
+      const id = await uidP();
+      await sel(sb.from('friends').delete().eq('user_id', id).eq('friend_id', fid).select('friend_id'));
+    },
+    // amigos que añadí y jugadores que me añadieron a mí
+    friends: async () => {
+      const id = await uidP();
+      if (!id) return { mine: [], requests: [] };
+      const rows = await sel(sb.from('friends').select('user_id,friend_id').or(`user_id.eq.${id},friend_id.eq.${id}`));
+      const mineIds = rows.filter((r) => r.user_id === id).map((r) => r.friend_id);
+      const byIds = rows.filter((r) => r.friend_id === id).map((r) => r.user_id);
+      const all = [...new Set([...mineIds, ...byIds])];
+      const profs = all.length ? await sel(sb.from('profiles').select('id,name,code').in('id', all)) : [];
+      const P = Object.fromEntries(profs.map((p) => [p.id, p]));
+      return {
+        mine: mineIds.map((f) => P[f] || { id: f, name: 'Jugador' }),
+        requests: byIds.filter((f) => !mineIds.includes(f)).map((f) => P[f] || { id: f, name: 'Jugador' }),
+      };
+    },
+  };
+
   /* ---- user ---- */
   async function mkUser() {
     const s = await session();
     if (!s) return null;
     const u = s.user;
+    // el nombre de Google solo se usa la primera vez; después manda el que elija el jugador
     try {
       await sb
         .from('profiles')
-        .upsert({ id: u.id, name: nameOfUser(u), avatar: (u.user_metadata && u.user_metadata.avatar_url) || null });
+        .upsert(
+          { id: u.id, name: nameOfUser(u), avatar: (u.user_metadata && u.user_metadata.avatar_url) || null },
+          { onConflict: 'id', ignoreDuplicates: true }
+        );
     } catch (e) {}
     const cache = {};
     return Object.freeze({
       id: async () => u.id,
-      me: async () => ({ id: u.id, name: nameOfUser(u), guest: false }),
+      me: async () => {
+        const p = await SBX.myProfile();
+        return { id: u.id, name: (p && p.name) || nameOfUser(u), guest: false };
+      },
       isOwner: () => false,
       canEdit: () => false,
       can: () => true,

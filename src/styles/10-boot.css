@@ -1,0 +1,70 @@
+/* ---- pantalla de carga: tapa todo hasta que el juego está listo ---- */
+#boot {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(ellipse at 50% 35%, #2a1d45, #0d101b 70%);
+  transition: opacity 0.6s;
+}
+#boot.out {
+  opacity: 0;
+  pointer-events: none;
+}
+#boot .bwrap {
+  width: min(420px, 80vw);
+  text-align: center;
+}
+#boot .blogo {
+  display: flex;
+  flex-direction: column;
+  line-height: 0.85;
+  transform: rotate(-3deg);
+  margin-bottom: 34px;
+}
+#boot .blogo span {
+  font-size: clamp(60px, 12vw, 104px);
+  font-weight: 900;
+  color: #ffd34d;
+  -webkit-text-stroke: 3px #5a2a00;
+  paint-order: stroke fill;
+  text-shadow: 0 7px 0 #5a2a00;
+}
+#boot .blogo small {
+  font-size: clamp(24px, 5vw, 40px);
+  font-weight: 900;
+  color: #fff;
+  -webkit-text-stroke: 2px #1b1030;
+  paint-order: stroke fill;
+  text-shadow: 0 4px 0 #1b1030;
+}
+#boot .blogo em {
+  font-style: normal;
+  color: #ff9a1f;
+}
+#boot .bbar {
+  height: 14px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.06);
+}
+#boot .bbar i {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: 99px;
+  background: linear-gradient(90deg, #ff8a1f, #ffd34d);
+  transition: width 0.25s;
+}
+#boot .btxt {
+  margin-top: 10px;
+  font-size: 13px;
+  font-weight: 800;
+  color: #9aa3c7;
+}
+body.booting #home,
+body.booting #menu {
+  visibility: hidden !important;
+}

@@ -11,7 +11,66 @@
     />
     <!--STYLES-->
   </head>
-  <body>
+  <body class="booting">
+    <div id="profileOv" hidden>
+      <div class="pcard" role="dialog" aria-label="Tu perfil">
+        <button class="pclose" id="pfClose" aria-label="Cerrar">✕</button>
+        <div class="phead">
+          <span class="pav" id="pfAv">?</span>
+          <div><b id="pfName">Jugador</b><small id="pfSub">Tu perfil</small></div>
+        </div>
+        <div class="psec">
+          <label for="pfNameIn">Nombre en el juego</label>
+          <div class="prow">
+            <input id="pfNameIn" maxlength="24" autocomplete="off" /><button class="btn green" id="pfSave">
+              Guardar
+            </button>
+          </div>
+          <small class="pmsg" id="pfNameMsg"></small>
+        </div>
+        <div class="psec">
+          <label>Tu código de amigo</label>
+          <div class="prow">
+            <b class="pcode" id="pfCode">······</b><button class="btn" id="pfCopyCode">Copiar código</button
+            ><button class="btn" id="pfCopyLink">Copiar enlace</button>
+          </div>
+          <small class="pmsg">Pásaselo a tus amigos: con tu código o tu enlace te pueden añadir.</small>
+        </div>
+        <div class="psec">
+          <label for="pfAddIn">Añadir un amigo</label>
+          <div class="prow">
+            <input id="pfAddIn" maxlength="8" placeholder="Código de 6 letras" autocomplete="off" /><button
+              class="btn blue"
+              id="pfAdd"
+            >
+              Añadir
+            </button>
+          </div>
+          <small class="pmsg" id="pfAddMsg"></small>
+        </div>
+        <div class="psec">
+          <label>Amigos</label>
+          <ul class="pfl" id="pfList"></ul>
+          <div id="pfReqBox" hidden>
+            <label style="margin-top: 10px">Te añadieron</label>
+            <ul class="pfl" id="pfReq"></ul>
+          </div>
+        </div>
+        <div class="prow pfoot">
+          <button class="btn" id="pfInvite">Invitar a una sala</button><span class="grow"></span
+          ><button class="btn red" id="pfLogout">Cerrar sesión</button>
+        </div>
+      </div>
+    </div>
+    <div id="boot">
+      <div class="bwrap">
+        <div class="blogo">
+          <span>Bonk</span><small>de los <em>Dioses</em></small>
+        </div>
+        <div class="bbar"><i id="bootBar"></i></div>
+        <div class="btxt" id="bootTxt">Cargando…</div>
+      </div>
+    </div>
     <div id="app">
       <canvas id="c" tabindex="0"></canvas>
       <div id="focusHint" hidden>

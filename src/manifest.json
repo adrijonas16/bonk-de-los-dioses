@@ -422,5 +422,9 @@
  {
   "file": "ui/home.js",
   "group": "game"
+ },
+ {
+  "file": "ui/boot.js",
+  "group": "game"
  }
 ]

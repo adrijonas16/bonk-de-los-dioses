@@ -16,7 +16,7 @@ function loop(now) {
       renderGame(dt);
     } else if (WORLD) {
       menuT += dt;
-      if (menuT > 14 && !PREV_BUSY) {
+      if (menuT > 40 && !PREV_BUSY) {
         menuT = 0;
         const ks = Object.keys(REALMS);
         menuRealm = ks[(ks.indexOf(menuRealm) + 1) % ks.length];

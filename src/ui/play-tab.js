@@ -111,6 +111,30 @@ $('segParty')
       })
   );
 const PREV = {};
+// las miniaturas de los mapas se generan una vez y se guardan en el navegador (no se repiten en cada visita)
+const PREV_KEY = 'bonk-prev-v2';
+try {
+  const saved = store && JSON.parse(store.getItem(PREV_KEY) || 'null');
+  if (saved)
+    for (const k in saved) {
+      const img = new Image();
+      img.src = saved[k];
+      const c = mkCanvas(240, 135);
+      PREV[k] = c;
+      img.onload = () => {
+        c.getContext('2d').drawImage(img, 0, 0);
+        const card = $('mc-' + k);
+        if (card) card.getContext('2d').drawImage(c, 0, 0);
+      };
+    }
+} catch (err) {}
+function savePreviews() {
+  try {
+    const out = {};
+    for (const k in PREV) out[k] = PREV[k].toDataURL('image/jpeg', 0.8);
+    store && store.setItem(PREV_KEY, JSON.stringify(out));
+  } catch (err) {}
+}
 let prevQueue = [];
 function renderMaps() {
   const box = $('maps');
@@ -162,6 +186,7 @@ function renderMaps() {
 function nextPreview() {
   if (!prevQueue.length || state !== 'menu') {
     PREV_BUSY = false;
+    if (!prevQueue.length) savePreviews();
     if (typeof homeEvent === 'function' && !$('home').hidden) homeEvent();
     if (state === 'menu') {
       buildWorld(menuRealm);
