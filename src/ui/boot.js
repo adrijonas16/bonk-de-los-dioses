@@ -22,6 +22,7 @@
       boot.classList.add('out');
       setTimeout(() => boot.remove(), 700);
       if (typeof renderHome === 'function') renderHome();
+      if (AS.ready) warmPortraits();
       return;
     }
     setTimeout(tick, 150);

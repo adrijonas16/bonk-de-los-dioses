@@ -14,7 +14,9 @@ function renderHome() {
     $('hGoogle').hidden = !ready;
   }
   const g = GOD[PROF.god];
-  if (HOME.god !== PROF.god || !$('tPlayCv').width) {
+  // se vuelve a dibujar cuando cambia el dios o cuando ya hay modelos 3D (antes solo había el dibujo pixel art)
+  if (HOME.god !== PROF.god || HOME.shots !== !!AS.ready || !$('tPlayCv').width) {
+    HOME.shots = !!AS.ready;
     HOME.god = PROF.god;
     fullSprite($('tPlayCv'), PROF.god, 2);
     const o = GODS.filter((x) => owns(x.id) && x.id !== PROF.god);
