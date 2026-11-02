@@ -1,0 +1,589 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+    <title>Bonk de los Dioses</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&family=Press+Start+2P&display=swap"
+    />
+    <!--STYLES-->
+  </head>
+  <body class="booting">
+    <div id="profileOv" hidden>
+      <div class="pcard" role="dialog" aria-label="Tu perfil">
+        <button class="pclose" id="pfClose" aria-label="Cerrar">✕</button>
+        <div class="phead">
+          <span class="pav" id="pfAv">?</span>
+          <div><b id="pfName">Jugador</b><small id="pfSub">Tu perfil</small></div>
+        </div>
+        <div class="psec">
+          <label for="pfNameIn">Nombre en el juego</label>
+          <div class="prow">
+            <input id="pfNameIn" maxlength="24" autocomplete="off" /><button class="btn green" id="pfSave">
+              Guardar
+            </button>
+          </div>
+          <small class="pmsg" id="pfNameMsg"></small>
+        </div>
+        <div class="psec">
+          <label>Tu código de amigo</label>
+          <div class="prow">
+            <b class="pcode" id="pfCode">······</b><button class="btn" id="pfCopyCode">Copiar código</button
+            ><button class="btn" id="pfCopyLink">Copiar enlace</button>
+          </div>
+          <small class="pmsg">Pásaselo a tus amigos: con tu código o tu enlace te pueden añadir.</small>
+        </div>
+        <div class="psec">
+          <label for="pfAddIn">Añadir un amigo</label>
+          <div class="prow">
+            <input id="pfAddIn" maxlength="8" placeholder="Código de 6 letras" autocomplete="off" /><button
+              class="btn blue"
+              id="pfAdd"
+            >
+              Añadir
+            </button>
+          </div>
+          <small class="pmsg" id="pfAddMsg"></small>
+        </div>
+        <div class="psec">
+          <label>Amigos</label>
+          <ul class="pfl" id="pfList"></ul>
+          <div id="pfReqBox" hidden>
+            <label style="margin-top: 10px">Te añadieron</label>
+            <ul class="pfl" id="pfReq"></ul>
+          </div>
+        </div>
+        <div class="prow pfoot">
+          <button class="btn" id="pfInvite">Invitar a una sala</button><span class="grow"></span
+          ><button class="btn red" id="pfLogout">Cerrar sesión</button>
+        </div>
+      </div>
+    </div>
+    <div id="boot">
+      <div class="bwrap">
+        <div class="blogo">
+          <span>Bonk</span><small>de los <em>Dioses</em></small>
+        </div>
+        <div class="bbar"><i id="bootBar"></i></div>
+        <div class="btxt" id="bootTxt">Cargando…</div>
+      </div>
+    </div>
+    <div id="app">
+      <canvas id="c" tabindex="0"></canvas>
+      <div id="focusHint" hidden>
+        <b>Haz clic aquí para jugar</b><span>El teclado se activa al tocar el juego</span>
+      </div>
+      <canvas id="ov"></canvas>
+      <div id="flash"></div>
+      <div id="nogl" hidden>
+        Este juego necesita WebGL y tu navegador no lo tiene disponible. Prueba con otro navegador o activa la
+        aceleración por hardware.
+      </div>
+
+      <div id="hud" hidden>
+        <div class="hudcard">
+          <div class="port"><canvas id="hudPort"></canvas><span class="lvb" id="hudLv">Nv. 1</span></div>
+          <div class="hudinfo">
+            <div class="hudname"><span id="hudName">Zeus</span><span class="pill" id="hudPan">Griega</span></div>
+            <div class="hb">
+              <span>PS</span>
+              <div class="bar"><i id="hpf"></i></div>
+              <em id="hpt"></em>
+            </div>
+            <div class="hb">
+              <span>EXP</span>
+              <div class="bar xp"><i id="xpf"></i></div>
+              <em id="xpt"></em>
+            </div>
+          </div>
+        </div>
+        <div id="p2card" hidden>
+          <canvas id="p2Port"></canvas>
+          <div>
+            <b id="p2Name"></b>
+            <div class="bar"><i id="p2hp"></i></div>
+          </div>
+        </div>
+        <div class="realm">
+          <div class="rt"><span id="rName">Reino</span><span id="rTime">0:00</span></div>
+          <small id="rMode"></small><small id="rNext"></small>
+        </div>
+        <div class="score" id="scoreBox">
+          <b id="scoreN">0</b
+          ><span id="comboB" hidden
+            ><i id="comboN">×1</i><em id="comboC">0 seguidas</em><u><s id="comboT"></s></u
+          ></span>
+        </div>
+        <div id="qHud" hidden></div>
+        <div id="qOffer" hidden></div>
+        <div id="boss" hidden>
+          <div id="bossName">Jefe</div>
+          <div class="bar"><i id="bossf"></i></div>
+        </div>
+        <button id="pauseBtn" aria-label="Pausa">II</button>
+        <div class="side">
+          <div class="box">
+            <div class="hdr h-theme"><span>Misiones</span><small>del reino</small></div>
+            <ul id="missions"></ul>
+            <div class="runstats">
+              <div><b id="kills">0</b><span>BAJAS</span></div>
+              <div class="goldbox">
+                <b><i class="cn"></i><span id="gold">0</span></b
+                ><span>ORO</span>
+              </div>
+            </div>
+          </div>
+          <div id="conc"></div>
+          <div id="party" hidden></div>
+        </div>
+        <div class="slots">
+          <div class="dash">
+            <div id="ult">
+              <span id="ultName"></span><span id="ultFill"></span><span class="em" id="ultEm">ϟ</span
+              ><span id="ultCd">R</span>
+            </div>
+            <small>SHIFT · DESLIZAR</small>
+            <div class="bar"><i id="dashf"></i></div>
+          </div>
+          <div>
+            <div id="islots"></div>
+            <div id="wslots" style="margin-top: 6px"></div>
+          </div>
+        </div>
+        <div id="big">
+          <div id="bigT"></div>
+          <div id="bigS"></div>
+        </div>
+        <div id="banner"></div>
+        <div id="lockHint">Haz clic en el mapa para mover la cámara con el ratón · Rueda para zoom</div>
+        <div id="tbtns" hidden>
+          <button id="tDash" aria-label="Deslizar">DESL.</button><button id="tJump" aria-label="Saltar">SALTAR</button
+          ><button id="power" aria-label="Poder divino">
+            <span id="powFill"></span><span class="em" id="powEm">ϟ</span>
+          </button>
+        </div>
+      </div>
+
+      <div id="home">
+        <div class="htop2">
+          <div class="hacct" id="hAcc"></div>
+          <button class="gbtn" id="hGoogle" hidden>
+            <svg viewBox="0 0 48 48" aria-hidden="true">
+              <path
+                fill="#FFC107"
+                d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"
+              />
+              <path
+                fill="#FF3D00"
+                d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"
+              />
+              <path
+                fill="#4CAF50"
+                d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"
+              />
+              <path
+                fill="#1976D2"
+                d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"
+              /></svg
+            ><span>Entrar con Google</span>
+          </button>
+        </div>
+        <div class="hub2">
+          <div class="hl">
+            <div class="hlogo2">
+              <span class="l1">Bonk</span><span class="l2">de los <em>Dioses</em></span
+              ><span class="lv">RAGNARÖK</span>
+            </div>
+            <div class="tiles">
+              <button class="htile ht-play" id="hEnter">
+                <canvas id="tPlayCv"></canvas
+                ><span class="tt"><b>Jugar</b><small id="tPlaySub">Modo historia</small></span>
+              </button>
+              <div class="tcol">
+                <button class="htile ht-surv" data-mode="libre">
+                  <b>Supervivencia</b><small id="tSurvSub">Récord 0</small>
+                </button>
+                <button class="htile ht-coop" data-party="online">
+                  <b>Online</b><small>Salas con amigos · 2-4</small>
+                </button>
+              </div>
+              <button class="htile ht-local" data-party="coop">
+                <canvas id="tLocalA"></canvas><canvas id="tLocalB"></canvas><b>Local 2J</b><small>Mismo teclado</small>
+              </button>
+              <button class="htile ht-event" id="hEvent"></button>
+              <button class="htile ht-daily" id="hDaily"></button>
+            </div>
+            <div class="tsmall">
+              <button class="ts" data-tab="dioses" style="--c: #ffc23a">
+                <span class="tsi"
+                  ><svg viewBox="0 0 24 24">
+                    <path
+                      d="M12 2l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 15.4 6.7 18.4l1.2-6L3.4 8.3l6-.7z"
+                      fill="#ffd34d"
+                      stroke="#7a4a00"
+                      stroke-width="1.4"
+                    /></svg></span
+                ><b>Dioses</b><small id="ts-dioses"></small></button
+              ><button class="ts" data-tab="tienda" style="--c: #3ccf6e">
+                <span class="tsi"
+                  ><svg viewBox="0 0 24 24">
+                    <path d="M5 8h14l-1.2 12H6.2z" fill="#3ccf6e" stroke="#0c4a24" stroke-width="1.4" />
+                    <path d="M9 8V6a3 3 0 0 1 6 0v2" fill="none" stroke="#0c4a24" stroke-width="1.6" />
+                    <circle cx="12" cy="14" r="2.4" fill="#ffd34d" stroke="#7a4a00" /></svg></span
+                ><b>Tienda</b><small id="ts-tienda"></small></button
+              ><button class="ts" data-tab="misiones" style="--c: #e09a50">
+                <span class="tsi"
+                  ><svg viewBox="0 0 24 24">
+                    <rect
+                      x="4"
+                      y="3"
+                      width="16"
+                      height="18"
+                      rx="2"
+                      fill="#e8d5a6"
+                      stroke="#6b4a1a"
+                      stroke-width="1.4"
+                    />
+                    <path d="M8 8h8M8 12h8M8 16h5" stroke="#6b4a1a" stroke-width="1.6" /></svg></span
+                ><b>Misiones</b><small id="ts-misiones"></small></button
+              ><button class="ts" data-tab="ranking" style="--c: #ff8a1f">
+                <span class="tsi"
+                  ><svg viewBox="0 0 24 24">
+                    <path d="M7 3h10v4a5 5 0 0 1-10 0z" fill="#ffc23a" stroke="#7a4a00" stroke-width="1.4" />
+                    <path
+                      d="M7 5H4a3 3 0 0 0 3 4M17 5h3a3 3 0 0 1-3 4"
+                      fill="none"
+                      stroke="#7a4a00"
+                      stroke-width="1.4"
+                    />
+                    <path
+                      d="M10 12h4v4h-4zM8 17h8v3H8z"
+                      fill="#ffc23a"
+                      stroke="#7a4a00"
+                      stroke-width="1.4"
+                    /></svg></span
+                ><b>Ranking</b><small id="ts-ranking"></small></button
+              ><button class="ts" data-tab="clan" style="--c: #4f8cff">
+                <span class="tsi"
+                  ><svg viewBox="0 0 24 24">
+                    <path
+                      d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z"
+                      fill="#4f8cff"
+                      stroke="#14306e"
+                      stroke-width="1.4"
+                    />
+                    <path d="M12 6v11M8 10h8" stroke="#fff" stroke-width="2" /></svg></span
+                ><b>Clan</b><small id="ts-clan"></small>
+              </button>
+            </div>
+          </div>
+          <aside class="hr">
+            <div class="lbp">
+              <div class="lbh"><b>Salón de los Héroes</b><small>Los mejores dioses de todos los panteones</small></div>
+              <div class="lbtabs" id="hLbTabs">
+                <button data-v="score" aria-pressed="true">Historia</button
+                ><button data-v="endless" aria-pressed="false">Supervivencia</button>
+              </div>
+              <div class="lbpod" id="hPod"></div>
+              <ol class="lbrows" id="hRank"></ol>
+              <button class="lball" id="hRankAll">Ver clasificación completa</button>
+            </div>
+          </aside>
+        </div>
+      </div>
+      <div class="ov" id="menu">
+        <header class="topbar">
+          <div class="logo" id="logoHome" title="Volver a la portada">
+            BONK DE LOS DIOSES<small>RAGNARÖK DE LOS PANTEONES</small>
+          </div>
+          <nav class="nav">
+            <button data-tab="jugar" aria-current="page">Jugar</button><button data-tab="dioses">Dioses</button
+            ><button data-tab="tienda">Tienda</button
+            ><button data-tab="misiones">Misiones<span id="misBadge" hidden>0</span></button
+            ><button data-tab="ranking">Clasificación</button><button data-tab="clan">Clan</button>
+          </nav>
+          <div class="me">
+            <span class="onl" id="onl">Conectando…</span
+            ><span class="coin"><i class="cn"></i><span id="coins">0</span></span
+            ><canvas id="pava"></canvas><span id="pname">Jugador</span>
+          </div>
+        </header>
+
+        <section class="tab" id="tab-jugar">
+          <div class="playgrid">
+            <div class="box hero">
+              <div class="art"><canvas id="heroCv"></canvas></div>
+              <div class="body">
+                <h2><span id="heroName">Zeus</span><span class="pill" id="heroPan">Griega</span></h2>
+                <div class="ttl" id="heroTitle"></div>
+                <div class="info" id="heroInfo"></div>
+                <div class="hstats" id="heroStats"></div>
+                <div class="themetag" data-themetag></div>
+                <button class="btn" id="heroChange" style="margin-top: 10px; width: 100%">Cambiar de dios</button>
+              </div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 12px; min-width: 0">
+              <div class="cols">
+                <div class="box">
+                  <div class="hdr h-orange">Modo</div>
+                  <div class="body">
+                    <div class="seg" id="segMode">
+                      <button data-v="ragnarok">Clásico<small>3 reinos y el Vacío Primordial</small></button
+                      ><button data-v="libre">
+                        Supervivencia<small>Un mapa sin fin, jefes cada vez más fuertes</small>
+                      </button>
+                    </div>
+                    <div class="sub" style="margin-top: 10px">Dificultad</div>
+                    <div class="seg" id="segDiff">
+                      <button data-v="normal">Normal<small>Para empezar</small></button
+                      ><button data-v="dificil">Difícil<small>×1,6 dracmas</small></button
+                      ><button data-v="pesadilla">Pesadilla<small>×2,5 · gana en Difícil</small></button>
+                    </div>
+                    <label class="sub" for="qTestSel" style="display: block; margin-top: 10px"
+                      >Encargos en Machu Picchu</label
+                    ><select id="qTestSel" style="width: 100%">
+                      <option value="azar">3 de 4 al azar (normal)</option>
+                      <option value="todos">Los 4 (prueba)</option>
+                      <option value="ladron">Solo el ladrón (prueba)</option>
+                      <option value="llama">Solo la llama (prueba)</option>
+                      <option value="sellos">Solo los sellos (prueba)</option>
+                      <option value="favor">Solo el favor (prueba)</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="box">
+                  <div class="hdr h-blue">Jugadores</div>
+                  <div class="body">
+                    <div class="seg" id="segParty">
+                      <button data-v="solo">Solo</button><button data-v="ia">Con IA</button
+                      ><button data-v="coop">Local 2J</button><button data-v="online">Online</button>
+                    </div>
+                    <p class="mut" id="partyHint" style="font-size: 13px; margin: 8px 0 0"></p>
+                    <div id="allyRow" style="margin-top: 8px">
+                      <label class="sub" for="allySel">Compañero IA</label
+                      ><select id="allySel" style="width: 100%"></select>
+                    </div>
+                    <div id="p2Row" style="margin-top: 8px">
+                      <label class="sub" for="p2Sel">Dios del jugador 2</label
+                      ><select id="p2Sel" style="width: 100%"></select>
+                    </div>
+                    <div id="relNote" class="relnote" hidden></div>
+                    <div id="onlineBox" style="margin-top: 8px"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="box">
+                <div class="hdr h-purple"><span>Mapa</span><small>Récord personal en cada mapa</small></div>
+                <div class="body"><div class="maps" id="maps"></div></div>
+              </div>
+              <button class="btn green huge" id="playBtn">JUGAR</button>
+              <div class="credits">
+                Modelos 3D: KayKit de Kay Lousberg y monstruos de Quaternius (CC0) · Zorro de PixelMannen, tomkranis y
+                AsoboStudio (CC-BY 4.0)
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="tab" id="tab-dioses" hidden>
+          <div class="gwrap">
+            <div class="box">
+              <div class="hdr h-theme"><span>Dioses</span><small>91 dioses de 14 tradiciones</small></div>
+              <div class="body">
+                <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px" id="gpans"></div>
+                <div class="ggrid" id="ggrid"></div>
+              </div>
+            </div>
+            <div class="box hero">
+              <div class="art"><canvas id="gdetCv"></canvas></div>
+              <div class="body">
+                <h2><span id="gdetName"></span><span class="pill" id="gdetPan"></span></h2>
+                <div class="ttl" id="gdetTitle"></div>
+                <div class="info" id="gdetInfo"></div>
+                <div class="themetag" data-themetag style="margin: 8px 0"></div>
+                <button class="btn green big" id="gdetBtn" style="width: 100%">Equipar</button>
+                <p class="mut" id="gdetNote" style="font-size: 13px"></p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="tab" id="tab-tienda" hidden>
+          <div style="display: flex; flex-direction: column; gap: 12px">
+            <div class="box">
+              <div class="hdr h-orange">
+                <span>Bendiciones permanentes</span><small>Se aplican en todas tus partidas</small>
+              </div>
+              <div class="body"><div class="shopgrid" id="upgrades"></div></div>
+            </div>
+            <div class="box">
+              <div class="hdr h-purple"><span>Dioses destacados</span><small>Cambian cada día</small></div>
+              <div class="body">
+                <div class="featgrid" id="featured"></div>
+                <p class="mut" id="shopNote" style="font-size: 13px; margin: 10px 0 0"></p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="tab" id="tab-misiones" hidden>
+          <div style="display: flex; flex-direction: column; gap: 12px">
+            <div class="box">
+              <div class="hdr h-green"><span>Misiones diarias</span><small>Se renuevan cada día</small></div>
+              <div class="body" style="display: flex; flex-direction: column; gap: 8px">
+                <div id="daily" style="display: flex; flex-direction: column; gap: 8px"></div>
+                <p class="mut" id="missionInfo" style="font-size: 13px; margin: 4px 0 0"></p>
+              </div>
+            </div>
+            <div class="box">
+              <div class="hdr h-blue">Tu historial</div>
+              <div class="body"><div class="tiles" id="pstats"></div></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="tab" id="tab-ranking" hidden>
+          <div class="box lb">
+            <div class="hdr h-purple"><span>Clasificación</span><small>Mejores puntuaciones de todos</small></div>
+            <div class="body">
+              <div
+                style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-bottom: 10px"
+                id="lbTabs"
+              >
+                <button class="chipb" data-v="global">Global</button
+                ><button class="chipb" data-v="super">Supervivencia</button
+                ><button class="chipb" data-v="mapa">Por mapa</button
+                ><button class="chipb" data-v="clanes">Clanes</button
+                ><select id="lbMap" hidden></select>
+              </div>
+              <div class="tablewrap">
+                <table>
+                  <tbody id="lbBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="tab" id="tab-guia" hidden><div id="guide"></div></section>
+        <section class="tab" id="tab-clan" hidden>
+          <div class="cols">
+            <div class="box">
+              <div class="hdr h-green">Tu clan</div>
+              <div class="body">
+                <div class="bigval" id="clanName" style="font-size: 30px">Sin clan</div>
+                <div style="display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap">
+                  <input id="clanIn" maxlength="20" placeholder="Nombre del clan" autocomplete="off" /><button
+                    class="btn green"
+                    id="clanJoin"
+                  >
+                    Unirme o crear</button
+                  ><button class="btn red" id="clanLeave">Salir del clan</button>
+                </div>
+                <p class="mut" style="font-size: 13px">
+                  La puntuación del clan suma la mejor partida de cada miembro y aparece en Clasificación → Clanes.
+                </p>
+              </div>
+            </div>
+            <div class="box">
+              <div class="hdr h-blue">Miembros</div>
+              <div class="body"><ul class="plist" id="clanMembers"></ul></div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="ov dim" id="levelup" hidden>
+        <div class="sheet" style="max-width: 980px">
+          <div class="hdr h-theme" style="border-radius: 16px">
+            <span id="luWho">Los dioses te ofrecen un don</span><small id="luEyebrow">Nivel 2</small>
+          </div>
+          <div class="cards" id="cards"></div>
+        </div>
+      </div>
+
+      <div class="ov dim" id="pause" hidden>
+        <div class="sheet">
+          <div class="phead">
+            <div class="port"><canvas id="psPort"></canvas><span class="lvb" id="psLv">Nv. 1</span></div>
+            <div>
+              <div class="pctx"><span class="pill">PAUSA</span><span id="psCtx"></span></div>
+              <div class="pname"><span id="psName"></span><span class="pill" id="psPan"></span></div>
+              <div class="pbars">
+                <span>PS</span>
+                <div class="bar"><i id="psHp"></i></div>
+                <span id="psHpT"></span><span>EXP</span>
+                <div class="bar xp"><i id="psXp"></i></div>
+                <span id="psXpT"></span>
+              </div>
+            </div>
+            <div class="ptiles" id="psTiles"></div>
+          </div>
+          <div class="pcols">
+            <div class="box">
+              <div class="hdr h-blue"><span>Armas</span><small id="psWcount"></small></div>
+              <div class="body" id="psWeapons"></div>
+            </div>
+            <div class="box">
+              <div class="hdr h-orange"><span>Objetos</span><small id="psIcount"></small></div>
+              <div class="body" id="psItems"></div>
+            </div>
+            <div class="box">
+              <div class="hdr h-purple"><span>Estadísticas</span><small>Verde: mejor que la base</small></div>
+              <div class="body" id="psStats"></div>
+            </div>
+          </div>
+          <div class="keysline">
+            <b>Esc/P</b> pausa · <b>WASD</b> mover · <b>Ratón</b> cámara · <b>Espacio</b> saltar (mantén para planear) ·
+            <b>Shift</b> deslizar · <b>R</b> poder divino · <b>E</b> interactuar · <b>Rueda</b> zoom · <b>T</b> mensaje
+            rápido en online <span id="psOnline"></span>
+          </div>
+          <div class="pbtns">
+            <button class="btn red big" id="psQuit">Abandonar</button
+            ><button class="btn big" id="psRestart">Reiniciar</button><span class="grow"></span
+            ><button class="btn green big" id="psContinue">Continuar</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="ov dim" id="end" hidden>
+        <div class="sheet" style="max-width: 980px">
+          <div class="phead">
+            <div class="port"><canvas id="enPort"></canvas></div>
+            <div>
+              <div class="pctx"><span class="pill" id="enEyebrow">Fin</span></div>
+              <div class="pname" id="enTitle"></div>
+            </div>
+            <div class="ptiles" id="enTiles"></div>
+          </div>
+          <div class="endgrid">
+            <div class="box">
+              <div class="hdr h-orange">Dracmas ganados</div>
+              <div class="body">
+                <div class="bigval gold" id="enCoins">+ 0</div>
+                <p class="mut" style="font-size: 13px">Gástalos en la Tienda en dioses y bendiciones.</p>
+              </div>
+            </div>
+            <div class="box">
+              <div class="hdr h-purple">Puntuación</div>
+              <div class="body">
+                <div class="bigval" id="enScore">0</div>
+                <p style="font-weight: 900; color: var(--green2)" id="enRec"></p>
+              </div>
+            </div>
+          </div>
+          <p class="mut" id="enRoute" style="margin: 0"></p>
+          <div class="pbtns">
+            <button class="btn big" id="enMenu">Volver al menú</button><span class="grow"></span
+            ><button class="btn green big" id="enAgain">Jugar de nuevo</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--SCRIPTS-->
+  </body>
+</html>

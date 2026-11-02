@@ -1,1 +1,0 @@
-window.SB_CONFIG={url:'https://pqvkdaimixgdzkhiygkj.supabase.co',anonKey:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBxdmtkYWltaXhnZHpraGl5Z2tqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM2NTAzNDEsImV4cCI6MjEwOTIyNjM0MX0.oPHb5YJPja28hXrQcwzGf7dAOSbiFPtcrq-BHS8rDu0'};

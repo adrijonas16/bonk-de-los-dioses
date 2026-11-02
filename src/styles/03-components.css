@@ -1,0 +1,222 @@
+/* ---- piezas comunes ---- */
+.btn {
+  border: none;
+  border-radius: 14px;
+  background: var(--card2);
+  color: var(--txt);
+  font-weight: 800;
+  font-size: 16px;
+  padding: 11px 18px;
+  box-shadow:
+    0 4px 0 rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transition: transform 0.08s;
+}
+.btn:not(:disabled):hover {
+  transform: translateY(-1px);
+}
+.btn.green {
+  background: linear-gradient(180deg, var(--green2), var(--green));
+  color: #062b14;
+}
+.btn.red {
+  background: linear-gradient(180deg, #ff7a86, var(--red));
+  color: #2b0508;
+}
+.btn.gold {
+  background: linear-gradient(180deg, #ffe07a, var(--gold));
+  color: #3a2600;
+}
+.btn.big {
+  font-size: 20px;
+  padding: 14px 26px;
+  border-radius: 16px;
+}
+.btn.huge {
+  font-size: 26px;
+  font-weight: 900;
+  padding: 18px 34px;
+  border-radius: 18px;
+  letter-spacing: 0.04em;
+  width: 100%;
+}
+.btn.sm {
+  font-size: 13px;
+  padding: 7px 12px;
+  border-radius: 10px;
+}
+.pill {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 900;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: var(--purple);
+  color: #fff;
+  vertical-align: middle;
+}
+.pill.rival {
+  background: var(--red);
+}
+.pill.aliado {
+  background: var(--gold);
+  color: #3a2600;
+}
+.pill.g {
+  background: #5a6aa8;
+}
+.mut {
+  color: var(--mut);
+}
+.sub {
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mut);
+  margin: 10px 0 6px;
+}
+.hdr {
+  position: relative;
+  border-radius: 16px 16px 0 0;
+  padding: 10px 16px;
+  font-weight: 900;
+  font-size: 18px;
+  color: #fff;
+  background: linear-gradient(90deg, var(--h1), var(--h2));
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.25);
+}
+.hdr::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--stripes);
+  pointer-events: none;
+}
+.hdr small {
+  font-size: 13px;
+  font-weight: 800;
+  opacity: 0.9;
+}
+.h-blue {
+  --h1: #2f6fff;
+  --h2: #4fc3ff;
+}
+.h-orange {
+  --h1: #ff8a1f;
+  --h2: #ffc23a;
+}
+.h-purple {
+  --h1: #7b4dff;
+  --h2: #d06cff;
+}
+.h-green {
+  --h1: #22a85a;
+  --h2: #7fe36a;
+}
+.h-theme {
+  --h1: var(--th1);
+  --h2: var(--th2);
+}
+.box {
+  background: var(--card);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+.box > .body {
+  padding: 14px 16px;
+}
+.tile {
+  background: #11142a;
+  border-radius: 14px;
+  padding: 8px 12px;
+  text-align: center;
+  min-width: 72px;
+}
+.tile b {
+  display: block;
+  font-size: 24px;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+.tile span {
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mut);
+}
+.chipb {
+  border: none;
+  border-radius: 999px;
+  background: var(--card2);
+  padding: 6px 12px;
+  font-weight: 800;
+  font-size: 13px;
+}
+.chipb[aria-pressed='true'] {
+  background: var(--th2);
+  color: #1a1200;
+}
+.seg {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.seg button {
+  border: 2px solid var(--line);
+  border-radius: 14px;
+  background: var(--card2);
+  padding: 9px 14px;
+  font-weight: 800;
+  font-size: 15px;
+  text-align: left;
+}
+.seg button small {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--mut);
+}
+.seg button[aria-pressed='true'] {
+  border-color: var(--th2);
+  background: color-mix(in srgb, var(--th2) 22%, var(--card2));
+}
+input,
+select {
+  font-family: var(--f);
+  font-weight: 800;
+  font-size: 15px;
+  border: 2px solid var(--line);
+  border-radius: 12px;
+  background: #11142a;
+  color: var(--txt);
+  padding: 9px 12px;
+}
+.bar {
+  position: relative;
+  height: 16px;
+  border-radius: 999px;
+  background: #0b0e1a;
+  overflow: hidden;
+}
+.bar i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--green), var(--green2));
+}
+.bar span {
+  position: absolute;
+  inset: 0;
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 16px;
+  text-align: center;
+}
