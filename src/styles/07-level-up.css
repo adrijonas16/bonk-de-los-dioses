@@ -1,0 +1,154 @@
+/* ---- nivel y cofres ---- */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 12px;
+}
+.card {
+  position: relative;
+  border: none;
+  border-radius: 18px;
+  background: #11142a;
+  text-align: left;
+  padding: 0 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: hidden;
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.35);
+  transition: transform 0.08s;
+}
+.card:not(:disabled):hover {
+  transform: translateY(-3px);
+}
+.card .ch {
+  margin: 0 -14px;
+  padding: 6px 14px;
+  font-weight: 900;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #fff;
+  background: linear-gradient(90deg, var(--c1, #2f6fff), var(--c2, #4fc3ff));
+  position: relative;
+}
+.card .ch::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--stripes);
+}
+.card.k-w {
+  --c1: #ff8a1f;
+  --c2: #ffc23a;
+}
+.card.k-p {
+  --c1: #2f6fff;
+  --c2: #4fc3ff;
+}
+.card.k-heal {
+  --c1: #22a85a;
+  --c2: #7fe36a;
+}
+.card[class*='rar-'] {
+  --c1: var(--rc);
+  --c2: color-mix(in srgb, var(--rc) 60%, #fff);
+  box-shadow:
+    0 0 0 2px var(--rc),
+    0 6px 0 rgba(0, 0, 0, 0.35);
+}
+.card.skip {
+  background: var(--card2);
+  padding-top: 14px;
+}
+.card .top2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.card .em {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: linear-gradient(160deg, #ffe07a, #ff9a1f);
+  color: #3a2600;
+  display: grid;
+  place-items: center;
+  font-size: 24px;
+  flex: none;
+}
+.card .nm {
+  font-weight: 900;
+  font-size: 17px;
+  line-height: 1.15;
+}
+.card .lv {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--mut);
+}
+.card .ds {
+  font-size: 14px;
+  line-height: 1.35;
+}
+.wst {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3px;
+  margin-bottom: 16px;
+  margin-top: 6px;
+  font-size: 13px;
+}
+.wst span {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 3px 7px;
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.05);
+}
+.wst em {
+  font-style: normal;
+  color: var(--mut);
+  font-weight: 700;
+}
+.wst b {
+  font-weight: 900;
+  white-space: nowrap;
+}
+.wst .up {
+  background: rgba(54, 196, 106, 0.18);
+}
+.wst .up b {
+  color: #7dffa8;
+}
+.wst .up b::after {
+  content: ' ▲';
+  font-size: 10px;
+}
+.wst .dn b {
+  color: #ff8a8a;
+}
+.wst .same {
+  opacity: 0.45;
+}
+.card .tg {
+  font-size: 11px;
+  font-weight: 900;
+  background: var(--card2);
+  color: var(--gold);
+  align-self: flex-start;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+.card kbd {
+  position: absolute;
+  right: 10px;
+  bottom: 8px;
+  font-family: var(--f);
+  font-weight: 900;
+  font-size: 12px;
+  background: var(--card2);
+  padding: 2px 8px;
+  border-radius: 8px;
+}
