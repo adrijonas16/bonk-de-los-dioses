@@ -85,10 +85,20 @@ const MAP_KINDS = {
   me: { name: 'Tú', col: '#ffffff', tip: () => 'Tú' },
 };
 // iconos dibujados a mano (todos distintos, con borde negro para leerse sobre cualquier terreno)
-function mapIcon(g, kind, a, b, s) {
+function mapIcon(g, kind, a, b, s, halo) {
   const K = MAP_KINDS[kind];
   g.save();
   g.translate(a, b);
+  if (halo) {
+    // halo del color del lugar para que destaque sobre el terreno
+    g.fillStyle = 'rgba(10,10,20,.55)';
+    g.beginPath();
+    g.arc(0, 0, s * 0.95, 0, 6.283);
+    g.fill();
+    g.strokeStyle = K.col;
+    g.lineWidth = 2.5;
+    g.stroke();
+  }
   g.lineJoin = 'round';
   g.lineWidth = 2;
   g.strokeStyle = '#120c08';
@@ -276,10 +286,10 @@ function drawWorldMap(g, W, H) {
   if (typeof questsOverlay === 'function') questsOverlay(g, P);
   const places = mapPlaces();
   let hover = null,
-    hd = 16;
+    hd = 22;
   for (const pl of places) {
     const [a, b] = P(pl.x, pl.y);
-    mapIcon(g, pl.kind, a, b, pl.kind === 'boss' ? 22 : 15);
+    mapIcon(g, pl.kind, a, b, pl.kind === 'boss' ? 34 : pl.kind === 'chest' ? 20 : 24, true);
     const d = Math.hypot(a - MAPUI.mx, b - MAPUI.my);
     if (d < hd) {
       hd = d;
@@ -319,11 +329,16 @@ function drawWorldMap(g, W, H) {
     g.strokeStyle = '#000';
     g.lineWidth = 2;
     g.beginPath();
-    g.moveTo(11, 0);
-    g.lineTo(-7, 7);
-    g.lineTo(-3, 0);
-    g.lineTo(-7, -7);
+    g.moveTo(18, 0);
+    g.lineTo(-11, 12);
+    g.lineTo(-5, 0);
+    g.lineTo(-11, -12);
     g.closePath();
+    g.lineWidth = 5;
+    g.strokeStyle = '#fff';
+    g.stroke();
+    g.lineWidth = 2;
+    g.strokeStyle = '#000';
     g.fill();
     g.stroke();
     g.restore();
@@ -395,9 +410,14 @@ function drawWorldMap(g, W, H) {
     'portal',
     'mark',
   ];
-  const rows = order.filter((k) => count[k] || k === 'mark');
-  const lw = W > 760 ? 210 : 170,
-    lh = 26,
+  const rows = order.filter((k) => count[k] || k === 'mark' || k === 'boss' || (k === 'portal' && G.ridx < 3));
+  const nxB = G.events.find((ev) => BOSSES[ev.key].tier !== 'mini') || G.events[0];
+  const status = {
+    boss: G.bosses.length ? 'en el mapa' : nxB ? `sale en ${fmt(nxB.t - G.rt)}` : '',
+    portal: G.portals ? 'abiertos' : 'tras el jefe',
+  };
+  const lw = W > 760 ? 250 : 200,
+    lh = 34,
     lx = 14,
     ly0 = Math.max(70, H / 2 - (rows.length * lh) / 2);
   g.fillStyle = 'rgba(16,18,32,.85)';
@@ -410,11 +430,17 @@ function drawWorldMap(g, W, H) {
   g.fillText('LEYENDA', lx + 4, ly0 - 18);
   rows.forEach((k, i) => {
     const y = ly0 + i * lh;
-    mapIcon(g, k, lx + 14, y, 15);
+    mapIcon(g, k, lx + 16, y, 22);
     g.fillStyle = '#fff';
-    g.font = '800 13px Nunito, sans-serif';
-    g.fillText(MAP_KINDS[k].name, lx + 32, y);
-    if (count[k] && k !== 'mark') {
+    g.font = '800 14px Nunito, sans-serif';
+    g.fillText(MAP_KINDS[k].name, lx + 40, y);
+    if (status[k] && !count[k]) {
+      g.fillStyle = '#9aa3c7';
+      g.textAlign = 'right';
+      g.font = '700 12px Nunito, sans-serif';
+      g.fillText(status[k], lx + lw - 18, y);
+      g.textAlign = 'left';
+    } else if (count[k] && k !== 'mark') {
       g.fillStyle = '#9aa3c7';
       g.textAlign = 'right';
       g.fillText('×' + count[k], lx + lw - 18, y);
