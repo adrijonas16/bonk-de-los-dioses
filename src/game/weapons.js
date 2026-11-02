@@ -1,7 +1,7 @@
 /* ---------- armas ---------- */
 const RM_K = { chain: 1, shot: 1, line: 1, boomer: 1, bounce: 1, homing: 1, sword: 1 };
 function lvR(l) {
-  return 0.62 + 0.08 * (l - 1);
+  return 0.45 + 0.09 * (l - 1);
 }
 function kst(Wd, l, p) {
   const s = kst0(Wd, l, p);
@@ -18,7 +18,7 @@ function kst0(Wd, l, p) {
         dmg: 20 + 9 * l,
         chains: 1 + l + p.chainBonus + (G.conc.trueno ? 2 : 0),
         bolts: l >= 4 ? 2 : 1,
-        range: 330,
+        range: 260,
       };
     case 'shot': {
       const qq = Wd.p;
@@ -41,7 +41,7 @@ function kst0(Wd, l, p) {
         rot: 3 + 0.25 * l,
       };
     case 'aura':
-      return { radius: 66 + 13 * l, dmg: 7 + 5 * l, tick: 0.45 };
+      return { radius: 46 + 17 * l, dmg: 7 + 5 * l, tick: 0.45 };
     case 'line':
       return {
         cd: Math.max(0.9, 2.1 - 0.16 * l),
@@ -76,7 +76,7 @@ function kst0(Wd, l, p) {
         life: 2.5,
       };
     case 'nova':
-      return { cd: Math.max(0.9, 2.4 - 0.18 * l), dmg: 25 + 10 * l, radius: 90 + 15 * l };
+      return { cd: Math.max(0.9, 2.4 - 0.18 * l), dmg: 25 + 10 * l, radius: 62 + 20 * l };
     case 'trail':
       return { life: 1.4 + 0.15 * l, dmg: 8 + 4 * l, r: 14 + 2 * l };
     case 'sword':

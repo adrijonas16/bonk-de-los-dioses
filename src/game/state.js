@@ -142,6 +142,7 @@ function weekEvent() {
   return { realm, ends, wk };
 }
 function newRun() {
+  document.body.classList.remove('map-open');
   setTimeout(focusGame, 0);
   allies = [];
   npcs = [];

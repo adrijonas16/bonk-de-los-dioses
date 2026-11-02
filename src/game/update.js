@@ -1,5 +1,6 @@
 /* ---------- actualización ---------- */
 function update(dt) {
+  if (G.mapOpen && !G.online) return; // mapa grande abierto: partida en pausa
   if (G.comboT > 0) {
     G.comboT -= dt;
     if (G.comboT <= 0) G.combo = 0;

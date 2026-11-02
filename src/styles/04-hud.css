@@ -751,3 +751,24 @@
   color: var(--th2);
   text-shadow: 0 2px 0 #000;
 }
+#mapBtn {
+  position: absolute;
+  top: 14px;
+  right: calc(max(14px, env(safe-area-inset-right, 0px)) + 236px);
+  border: none;
+  border-radius: 12px;
+  padding: 6px 12px;
+  font-weight: 900;
+  font-size: 13px;
+  color: #fff;
+  background: rgba(18, 22, 38, 0.88);
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.4);
+  pointer-events: auto;
+  z-index: 3;
+}
+#mapBtn[aria-pressed='true'] {
+  background: var(--th1);
+}
+body.map-open #hud > *:not(#mapBtn) {
+  visibility: hidden;
+}

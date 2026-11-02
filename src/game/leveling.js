@@ -86,7 +86,8 @@ function openLevelUp() {
   look = null;
   keys.clear();
   const p = G.queue[0];
-  $('luEyebrow').textContent = `Nivel ${G.level}`;
+  $('luEyebrow').textContent =
+    `Nivel ${G.level} · Armas ${Object.keys(p.weapons).length}/${MAX_WEAPONS} · Dones ${Object.keys(p.passives).length}/${MAX_PASSIVES}`;
   $('luWho').textContent = players.length > 1 ? `${p.g.name} elige un don` : 'Los dioses te ofrecen un don';
   applyTheme(p.g.pan);
   const picks = options(p);
@@ -97,7 +98,7 @@ function openLevelUp() {
     bt.className = 'card k-' + o.t;
     bt.id = 'card-' + i;
     const info = optInfo(p, o);
-    bt.innerHTML = `<span class="ch">${o.t === 'w' ? 'Arma' : o.t === 'p' ? 'Don' : 'Curación'}</span><span class="top2"><span class="em">${info.em}</span><span><span class="nm">${info.nm}</span><br><span class="lv">${info.lv}</span></span></span><span class="ds">${info.ds}</span>${info.tag ? `<span class="tg">${info.tag}</span>` : ''}<kbd>${i + 1}</kbd>`;
+    bt.innerHTML = `<span class="ch">${o.t === 'w' ? 'Arma' : o.t === 'p' ? 'Don' : o.t === 's' ? 'Mejora' : 'Curación'}</span><span class="top2"><span class="em">${info.em}</span><span><span class="nm">${info.nm}</span><br><span class="lv">${info.lv}</span></span></span><span class="ds">${info.ds}</span>${info.tag ? `<span class="tg">${info.tag}</span>` : ''}<kbd>${i + 1}</kbd>`;
     bt.onclick = () => {
       applyOpt(p, o);
       G.queue.shift();
@@ -108,11 +109,51 @@ function openLevelUp() {
   });
   show('levelup');
 }
+// mejoras básicas: no ocupan hueco de don y siempre puede salir al menos una al subir de nivel
+const STAT_UPS = {
+  vida: {
+    name: 'Vitalidad',
+    em: '❤',
+    max: 10,
+    desc: '+20 de vida máxima y te curas 20.',
+    apply: (p) => ((p.maxHp += 20), heal(p, 20)),
+  },
+  fuerza: {
+    name: 'Fuerza',
+    em: '⚔',
+    max: 10,
+    desc: '+8 % de daño con todas tus armas.',
+    apply: (p) => (p.dmgMul += 0.08),
+  },
+  regen: { name: 'Regeneración', em: '✚', max: 10, desc: '+0,4 de vida por segundo.', apply: (p) => (p.regen += 0.4) },
+  veloc: {
+    name: 'Agilidad',
+    em: '➹',
+    max: 6,
+    desc: '+5 % de velocidad de movimiento.',
+    apply: (p) => (p.speed *= 1.05),
+  },
+  guardia: {
+    name: 'Guardia',
+    em: '⛨',
+    max: 5,
+    desc: '+1 de armadura: cada golpe te quita 1 menos.',
+    apply: (p) => (p.armor += 1),
+  },
+};
+const MAX_WEAPONS = 4,
+  MAX_PASSIVES = 6;
+function statOptions(p) {
+  p.sups = p.sups || {};
+  return Object.keys(STAT_UPS)
+    .filter((k) => (p.sups[k] || 0) < STAT_UPS[k].max)
+    .map((k) => ({ t: 's', k }));
+}
 function options(p) {
   const pool = [];
   const r = REALMS[G.realm];
   for (const k in p.weapons) if (p.weapons[k].lvl < 7) pool.push({ t: 'w', k }, { t: 'w', k });
-  if (Object.keys(p.weapons).length < 4) {
+  if (Object.keys(p.weapons).length < MAX_WEAPONS) {
     const pan = r.pan;
     const loc = Object.keys(WEAPONS).filter((k) => WEAPONS[k].pan === pan && !p.weapons[k]);
     const other = shuffle(Object.keys(WEAPONS).filter((k) => !p.weapons[k] && WEAPONS[k].pan !== pan)).slice(0, 3);
@@ -123,7 +164,7 @@ function options(p) {
     const d = PASSIVES[k],
       l = p.passives[k] || 0;
     if (l >= 5) continue;
-    if (!l && pc >= 6) continue;
+    if (!l && pc >= MAX_PASSIVES) continue;
     if (d.realm && d.realm !== G.realm && !l) continue;
     pool.push({ t: 'p', k });
     if (d.realm === G.realm && !l) pool.push({ t: 'p', k });
@@ -133,6 +174,13 @@ function options(p) {
   for (const o of pool) {
     if (!picks.some((q2) => q2.k === o.k)) picks.push(o);
     if (picks.length === 3) break;
+  }
+  // una de las tres cartas es siempre una mejora básica (vida, fuerza, regeneración…)
+  const st = shuffle(statOptions(p));
+  if (st.length) {
+    if (picks.length >= 3) picks[2] = st[0];
+    else picks.push(st[0]);
+    if (picks.length < 3 && st[1]) picks.push(st[1]);
   }
   if (!picks.length) picks.push({ t: 'heal' });
   return picks;
@@ -210,6 +258,11 @@ function optInfo(p, o) {
       tag: d.tag ? CONCILIOS[d.tag].name : '',
     };
   }
+  if (o.t === 's') {
+    const d = STAT_UPS[o.k],
+      l = (p.sups && p.sups[o.k]) || 0;
+    return { em: d.em, nm: d.name.toUpperCase(), lv: `Mejora ${l} → ${l + 1} de ${d.max}`, ds: d.desc };
+  }
   return { em: '✚', nm: 'NÉCTAR', lv: 'Curación', ds: 'Recuperas 40 de vida.' };
 }
 function applyOpt(p, o) {
@@ -219,6 +272,10 @@ function applyOpt(p, o) {
   } else if (o.t === 'p') {
     p.passives[o.k] = (p.passives[o.k] || 0) + 1;
     PASSIVES[o.k].apply(p);
+  } else if (o.t === 's') {
+    p.sups = p.sups || {};
+    p.sups[o.k] = (p.sups[o.k] || 0) + 1;
+    STAT_UPS[o.k].apply(p);
   } else heal(p, 40);
 }
 function autoPick(p) {

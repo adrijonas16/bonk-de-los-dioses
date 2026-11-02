@@ -122,3 +122,19 @@ $('psRestart').onclick = () => {
 $('pauseBtn').onclick = () => {
   if (state === 'play') pause(true);
 };
+$('mapBtn').onclick = (ev) => {
+  ev.stopPropagation();
+  toggleWorldMap();
+};
+// tocar el minimapa también abre el mapa grande; tocar fuera lo cierra
+$('c').addEventListener('pointerdown', (ev) => {
+  if (!G || (state !== 'play' && !G.mapOpen)) return;
+  const r = $('c').getBoundingClientRect(),
+    x = ev.clientX - r.left,
+    y = ev.clientY - r.top,
+    mmR = Math.min(78, r.width * 0.09);
+  if (G.mapOpen || Math.hypot(x - (r.width - mmR - 18), y - (mmR + 18)) < mmR + 6) {
+    ev.stopImmediatePropagation();
+    toggleWorldMap();
+  }
+});

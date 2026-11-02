@@ -46,6 +46,10 @@
   --c1: #2f6fff;
   --c2: #4fc3ff;
 }
+.card.k-s {
+  --c1: #c2452d;
+  --c2: #ff7a5a;
+}
 .card.k-heal {
   --c1: #22a85a;
   --c2: #7fe36a;

@@ -1,430 +1,434 @@
 [
- {
-  "file": "data/palette.js",
-  "group": "data"
- },
- {
-  "file": "data/weapons.js",
-  "group": "data"
- },
- {
-  "file": "data/gods.js",
-  "group": "data"
- },
- {
-  "file": "data/passives.js",
-  "group": "data"
- },
- {
-  "file": "data/councils.js",
-  "group": "data"
- },
- {
-  "file": "data/enemies.js",
-  "group": "data"
- },
- {
-  "file": "data/bosses.js",
-  "group": "data"
- },
- {
-  "file": "data/realms.js",
-  "group": "data"
- },
- {
-  "file": "data/relations.js",
-  "group": "data"
- },
- {
-  "file": "data/heaven.js",
-  "group": "data"
- },
- {
-  "file": "data/god-looks.js",
-  "group": "data"
- },
- {
-  "file": "data/themes.js",
-  "group": "data"
- },
- {
-  "file": "data/items.js",
-  "group": "data"
- },
- {
-  "file": "data/missions.js",
-  "group": "data"
- },
- {
-  "file": "data/shop.js",
-  "group": "data"
- },
- {
-  "file": "core/utils.js",
-  "group": "game"
- },
- {
-  "file": "core/pixel-draw.js",
-  "group": "game"
- },
- {
-  "file": "core/sprite-processing.js",
-  "group": "game"
- },
- {
-  "file": "core/god-sprites.js",
-  "group": "game"
- },
- {
-  "file": "core/enemy-sprites.js",
-  "group": "game"
- },
- {
-  "file": "core/boss-sprites.js",
-  "group": "game"
- },
- {
-  "file": "core/pixel-digits.js",
-  "group": "game"
- },
- {
-  "file": "world/terrain.js",
-  "group": "game"
- },
- {
-  "file": "world/terrain-colors.js",
-  "group": "game"
- },
- {
-  "file": "world/textures.js",
-  "group": "game"
- },
- {
-  "file": "world/grass.js",
-  "group": "game"
- },
- {
-  "file": "world/props.js",
-  "group": "game"
- },
- {
-  "file": "world/structures.js",
-  "group": "game"
- },
- {
-  "file": "world/build.js",
-  "group": "game"
- },
- {
-  "file": "world/weather.js",
-  "group": "game"
- },
- {
-  "file": "world/sprite-materials.js",
-  "group": "game"
- },
- {
-  "file": "net/state.js",
-  "group": "game"
- },
- {
-  "file": "net/profile.js",
-  "group": "game"
- },
- {
-  "file": "net/platform.js",
-  "group": "game"
- },
- {
-  "file": "net/rooms.js",
-  "group": "game"
- },
- {
-  "file": "net/sync.js",
-  "group": "game"
- },
- {
-  "file": "net/leaderboard.js",
-  "group": "game"
- },
- {
-  "file": "game/state.js",
-  "group": "game"
- },
- {
-  "file": "game/input.js",
-  "group": "game"
- },
- {
-  "file": "game/overlays.js",
-  "group": "game"
- },
- {
-  "file": "game/councils.js",
-  "group": "game"
- },
- {
-  "file": "game/weapons.js",
-  "group": "game"
- },
- {
-  "file": "game/powers.js",
-  "group": "game"
- },
- {
-  "file": "game/allies.js",
-  "group": "game"
- },
- {
-  "file": "game/spatial-grid.js",
-  "group": "game"
- },
- {
-  "file": "game/movement.js",
-  "group": "game"
- },
- {
-  "file": "game/enemies.js",
-  "group": "game"
- },
- {
-  "file": "game/update.js",
-  "group": "game"
- },
- {
-  "file": "game/leveling.js",
-  "group": "game"
- },
- {
-  "file": "render/scene.js",
-  "group": "game"
- },
- {
-  "file": "render/entity-objects.js",
-  "group": "game"
- },
- {
-  "file": "render/instances.js",
-  "group": "game"
- },
- {
-  "file": "render/geometries.js",
-  "group": "game"
- },
- {
-  "file": "render/projectiles.js",
-  "group": "game"
- },
- {
-  "file": "render/boss-textures.js",
-  "group": "game"
- },
- {
-  "file": "render/orbitals.js",
-  "group": "game"
- },
- {
-  "file": "render/camera.js",
-  "group": "game"
- },
- {
-  "file": "render/frame.js",
-  "group": "game"
- },
- {
-  "file": "render/overlay-2d.js",
-  "group": "game"
- },
- {
-  "file": "render/loop.js",
-  "group": "game"
- },
- {
-  "file": "game/quests/definitions.js",
-  "group": "game"
- },
- {
-  "file": "game/quests/utils.js",
-  "group": "game"
- },
- {
-  "file": "game/quests/reachability.js",
-  "group": "game"
- },
- {
-  "file": "game/quests/placement.js",
-  "group": "game"
- },
- {
-  "file": "game/quests/offers.js",
-  "group": "game"
- },
- {
-  "file": "game/quests/thief.js",
-  "group": "game"
- },
- {
-  "file": "game/quests/flame.js",
-  "group": "game"
- },
- {
-  "file": "game/quests/seals.js",
-  "group": "game"
- },
- {
-  "file": "game/quests/favor.js",
-  "group": "game"
- },
- {
-  "file": "game/quests/combat-hooks.js",
-  "group": "game"
- },
- {
-  "file": "game/quests/update.js",
-  "group": "game"
- },
- {
-  "file": "game/quests/ui.js",
-  "group": "game"
- },
- {
-  "file": "game/quests/markers.js",
-  "group": "game"
- },
- {
-  "file": "game/quests/render.js",
-  "group": "game"
- },
- {
-  "file": "render/models/materials.js",
-  "group": "game"
- },
- {
-  "file": "render/models/textures.js",
-  "group": "game"
- },
- {
-  "file": "render/models/god-builder.js",
-  "group": "game"
- },
- {
-  "file": "render/models/god-animation.js",
-  "group": "game"
- },
- {
-  "file": "render/models/enemy-templates.js",
-  "group": "game"
- },
- {
-  "file": "render/models/enemy-instances.js",
-  "group": "game"
- },
- {
-  "file": "render/models/bosses-3d.js",
-  "group": "game"
- },
- {
-  "file": "render/assets/loader.js",
-  "group": "game"
- },
- {
-  "file": "render/assets/recolor.js",
-  "group": "game"
- },
- {
-  "file": "render/assets/god-bodies.js",
-  "group": "game"
- },
- {
-  "file": "render/assets/geometry-utils.js",
-  "group": "game"
- },
- {
-  "file": "render/assets/props.js",
-  "group": "game"
- },
- {
-  "file": "render/assets/baked-enemies.js",
-  "group": "game"
- },
- {
-  "file": "render/assets/rigged-bosses.js",
-  "group": "game"
- },
- {
-  "file": "render/assets/portraits.js",
-  "group": "game"
- },
- {
-  "file": "render/human/humans.js",
-  "group": "game"
- },
- {
-  "file": "ui/dom.js",
-  "group": "game"
- },
- {
-  "file": "ui/theme.js",
-  "group": "game"
- },
- {
-  "file": "ui/portraits.js",
-  "group": "game"
- },
- {
-  "file": "ui/menu.js",
-  "group": "game"
- },
- {
-  "file": "ui/play-tab.js",
-  "group": "game"
- },
- {
-  "file": "ui/online-tab.js",
-  "group": "game"
- },
- {
-  "file": "ui/gods-tab.js",
-  "group": "game"
- },
- {
-  "file": "ui/shop-tab.js",
-  "group": "game"
- },
- {
-  "file": "ui/missions-tab.js",
-  "group": "game"
- },
- {
-  "file": "ui/leaderboard-tab.js",
-  "group": "game"
- },
- {
-  "file": "ui/clan-tab.js",
-  "group": "game"
- },
- {
-  "file": "ui/hud.js",
-  "group": "game"
- },
- {
-  "file": "ui/pause.js",
-  "group": "game"
- },
- {
-  "file": "ui/results.js",
-  "group": "game"
- },
- {
-  "file": "ui/touch-controls.js",
-  "group": "game"
- },
- {
-  "file": "ui/home.js",
-  "group": "game"
- },
- {
-  "file": "ui/boot.js",
-  "group": "game"
- }
+  {
+    "file": "data/palette.js",
+    "group": "data"
+  },
+  {
+    "file": "data/weapons.js",
+    "group": "data"
+  },
+  {
+    "file": "data/gods.js",
+    "group": "data"
+  },
+  {
+    "file": "data/passives.js",
+    "group": "data"
+  },
+  {
+    "file": "data/councils.js",
+    "group": "data"
+  },
+  {
+    "file": "data/enemies.js",
+    "group": "data"
+  },
+  {
+    "file": "data/bosses.js",
+    "group": "data"
+  },
+  {
+    "file": "data/realms.js",
+    "group": "data"
+  },
+  {
+    "file": "data/relations.js",
+    "group": "data"
+  },
+  {
+    "file": "data/heaven.js",
+    "group": "data"
+  },
+  {
+    "file": "data/god-looks.js",
+    "group": "data"
+  },
+  {
+    "file": "data/themes.js",
+    "group": "data"
+  },
+  {
+    "file": "data/items.js",
+    "group": "data"
+  },
+  {
+    "file": "data/missions.js",
+    "group": "data"
+  },
+  {
+    "file": "data/shop.js",
+    "group": "data"
+  },
+  {
+    "file": "core/utils.js",
+    "group": "game"
+  },
+  {
+    "file": "core/pixel-draw.js",
+    "group": "game"
+  },
+  {
+    "file": "core/sprite-processing.js",
+    "group": "game"
+  },
+  {
+    "file": "core/god-sprites.js",
+    "group": "game"
+  },
+  {
+    "file": "core/enemy-sprites.js",
+    "group": "game"
+  },
+  {
+    "file": "core/boss-sprites.js",
+    "group": "game"
+  },
+  {
+    "file": "core/pixel-digits.js",
+    "group": "game"
+  },
+  {
+    "file": "world/terrain.js",
+    "group": "game"
+  },
+  {
+    "file": "world/terrain-colors.js",
+    "group": "game"
+  },
+  {
+    "file": "world/textures.js",
+    "group": "game"
+  },
+  {
+    "file": "world/grass.js",
+    "group": "game"
+  },
+  {
+    "file": "world/props.js",
+    "group": "game"
+  },
+  {
+    "file": "world/structures.js",
+    "group": "game"
+  },
+  {
+    "file": "world/build.js",
+    "group": "game"
+  },
+  {
+    "file": "world/weather.js",
+    "group": "game"
+  },
+  {
+    "file": "world/sprite-materials.js",
+    "group": "game"
+  },
+  {
+    "file": "net/state.js",
+    "group": "game"
+  },
+  {
+    "file": "net/profile.js",
+    "group": "game"
+  },
+  {
+    "file": "net/platform.js",
+    "group": "game"
+  },
+  {
+    "file": "net/rooms.js",
+    "group": "game"
+  },
+  {
+    "file": "net/sync.js",
+    "group": "game"
+  },
+  {
+    "file": "net/leaderboard.js",
+    "group": "game"
+  },
+  {
+    "file": "game/state.js",
+    "group": "game"
+  },
+  {
+    "file": "game/input.js",
+    "group": "game"
+  },
+  {
+    "file": "game/overlays.js",
+    "group": "game"
+  },
+  {
+    "file": "game/councils.js",
+    "group": "game"
+  },
+  {
+    "file": "game/weapons.js",
+    "group": "game"
+  },
+  {
+    "file": "game/powers.js",
+    "group": "game"
+  },
+  {
+    "file": "game/allies.js",
+    "group": "game"
+  },
+  {
+    "file": "game/spatial-grid.js",
+    "group": "game"
+  },
+  {
+    "file": "game/movement.js",
+    "group": "game"
+  },
+  {
+    "file": "game/enemies.js",
+    "group": "game"
+  },
+  {
+    "file": "game/update.js",
+    "group": "game"
+  },
+  {
+    "file": "game/leveling.js",
+    "group": "game"
+  },
+  {
+    "file": "render/scene.js",
+    "group": "game"
+  },
+  {
+    "file": "render/entity-objects.js",
+    "group": "game"
+  },
+  {
+    "file": "render/instances.js",
+    "group": "game"
+  },
+  {
+    "file": "render/geometries.js",
+    "group": "game"
+  },
+  {
+    "file": "render/projectiles.js",
+    "group": "game"
+  },
+  {
+    "file": "render/boss-textures.js",
+    "group": "game"
+  },
+  {
+    "file": "render/orbitals.js",
+    "group": "game"
+  },
+  {
+    "file": "render/camera.js",
+    "group": "game"
+  },
+  {
+    "file": "render/frame.js",
+    "group": "game"
+  },
+  {
+    "file": "render/overlay-2d.js",
+    "group": "game"
+  },
+  {
+    "file": "render/world-map.js",
+    "group": "game"
+  },
+  {
+    "file": "render/loop.js",
+    "group": "game"
+  },
+  {
+    "file": "game/quests/definitions.js",
+    "group": "game"
+  },
+  {
+    "file": "game/quests/utils.js",
+    "group": "game"
+  },
+  {
+    "file": "game/quests/reachability.js",
+    "group": "game"
+  },
+  {
+    "file": "game/quests/placement.js",
+    "group": "game"
+  },
+  {
+    "file": "game/quests/offers.js",
+    "group": "game"
+  },
+  {
+    "file": "game/quests/thief.js",
+    "group": "game"
+  },
+  {
+    "file": "game/quests/flame.js",
+    "group": "game"
+  },
+  {
+    "file": "game/quests/seals.js",
+    "group": "game"
+  },
+  {
+    "file": "game/quests/favor.js",
+    "group": "game"
+  },
+  {
+    "file": "game/quests/combat-hooks.js",
+    "group": "game"
+  },
+  {
+    "file": "game/quests/update.js",
+    "group": "game"
+  },
+  {
+    "file": "game/quests/ui.js",
+    "group": "game"
+  },
+  {
+    "file": "game/quests/markers.js",
+    "group": "game"
+  },
+  {
+    "file": "game/quests/render.js",
+    "group": "game"
+  },
+  {
+    "file": "render/models/materials.js",
+    "group": "game"
+  },
+  {
+    "file": "render/models/textures.js",
+    "group": "game"
+  },
+  {
+    "file": "render/models/god-builder.js",
+    "group": "game"
+  },
+  {
+    "file": "render/models/god-animation.js",
+    "group": "game"
+  },
+  {
+    "file": "render/models/enemy-templates.js",
+    "group": "game"
+  },
+  {
+    "file": "render/models/enemy-instances.js",
+    "group": "game"
+  },
+  {
+    "file": "render/models/bosses-3d.js",
+    "group": "game"
+  },
+  {
+    "file": "render/assets/loader.js",
+    "group": "game"
+  },
+  {
+    "file": "render/assets/recolor.js",
+    "group": "game"
+  },
+  {
+    "file": "render/assets/god-bodies.js",
+    "group": "game"
+  },
+  {
+    "file": "render/assets/geometry-utils.js",
+    "group": "game"
+  },
+  {
+    "file": "render/assets/props.js",
+    "group": "game"
+  },
+  {
+    "file": "render/assets/baked-enemies.js",
+    "group": "game"
+  },
+  {
+    "file": "render/assets/rigged-bosses.js",
+    "group": "game"
+  },
+  {
+    "file": "render/assets/portraits.js",
+    "group": "game"
+  },
+  {
+    "file": "render/human/humans.js",
+    "group": "game"
+  },
+  {
+    "file": "ui/dom.js",
+    "group": "game"
+  },
+  {
+    "file": "ui/theme.js",
+    "group": "game"
+  },
+  {
+    "file": "ui/portraits.js",
+    "group": "game"
+  },
+  {
+    "file": "ui/menu.js",
+    "group": "game"
+  },
+  {
+    "file": "ui/play-tab.js",
+    "group": "game"
+  },
+  {
+    "file": "ui/online-tab.js",
+    "group": "game"
+  },
+  {
+    "file": "ui/gods-tab.js",
+    "group": "game"
+  },
+  {
+    "file": "ui/shop-tab.js",
+    "group": "game"
+  },
+  {
+    "file": "ui/missions-tab.js",
+    "group": "game"
+  },
+  {
+    "file": "ui/leaderboard-tab.js",
+    "group": "game"
+  },
+  {
+    "file": "ui/clan-tab.js",
+    "group": "game"
+  },
+  {
+    "file": "ui/hud.js",
+    "group": "game"
+  },
+  {
+    "file": "ui/pause.js",
+    "group": "game"
+  },
+  {
+    "file": "ui/results.js",
+    "group": "game"
+  },
+  {
+    "file": "ui/touch-controls.js",
+    "group": "game"
+  },
+  {
+    "file": "ui/home.js",
+    "group": "game"
+  },
+  {
+    "file": "ui/boot.js",
+    "group": "game"
+  }
 ]

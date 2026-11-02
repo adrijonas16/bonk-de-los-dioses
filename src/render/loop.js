@@ -49,6 +49,7 @@ function loop(now) {
 }
 let PREV_BUSY = false;
 function toMenu() {
+  document.body.classList.remove('map-open');
   state = 'menu';
   if (document.pointerLockElement)
     try {

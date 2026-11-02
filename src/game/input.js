@@ -53,6 +53,14 @@ function onKeyDown(ev) {
     closeShop();
     return;
   }
+  if (code === 'KeyM' && G && (state === 'play' || G.mapOpen)) {
+    toggleWorldMap();
+    return;
+  }
+  if (code === 'Escape' && G && G.mapOpen) {
+    toggleWorldMap(false);
+    return;
+  }
   if (code === 'Escape' || code === 'KeyP') {
     if (state === 'play') pause(true);
     else if (state === 'pause') pause(false);

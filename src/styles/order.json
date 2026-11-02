@@ -1,14 +1,14 @@
 [
- "styles/00-base.css",
- "styles/01-home.css",
- "styles/02-home-v2.css",
- "styles/03-components.css",
- "styles/04-hud.css",
- "styles/05-layers.css",
- "styles/06-menu.css",
- "styles/07-level-up.css",
- "styles/08-pause.css",
- "styles/09-results.css",
- "styles/10-boot.css",
- "styles/11-profile.css"
+  "styles/00-base.css",
+  "styles/01-home.css",
+  "styles/02-home-v2.css",
+  "styles/03-components.css",
+  "styles/04-hud.css",
+  "styles/05-layers.css",
+  "styles/06-menu.css",
+  "styles/07-level-up.css",
+  "styles/08-pause.css",
+  "styles/09-results.css",
+  "styles/10-boot.css",
+  "styles/11-profile.css"
 ]
