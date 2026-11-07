@@ -1,0 +1,5 @@
+---
+description: Reglas generales del proyecto Bonk de los Dioses
+alwaysApply: true
+---
+Sigue `AGENTS.md` (estructura de `src/`, orden de carga en `src/manifest.json`, estándares de código, Supabase con migraciones y RLS, pruebas y git) y las reglas por zona de `.claude/rules/`. Pasos para tareas habituales en `.claude/skills/*/SKILL.md`. Antes de terminar: `npm run check`.

@@ -168,6 +168,10 @@
     "group": "game"
   },
   {
+    "file": "game/scoring.js",
+    "group": "game"
+  },
+  {
     "file": "game/powers.js",
     "group": "game"
   },

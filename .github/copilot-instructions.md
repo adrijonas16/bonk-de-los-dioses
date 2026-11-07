@@ -1,0 +1,1 @@
+Sigue las reglas de `AGENTS.md` (estructura, estándares de código, base de datos, pruebas y git) y las reglas por zona de `.claude/rules/`. Todo el texto del juego está en español. Antes de dar algo por terminado: `npm run check`.

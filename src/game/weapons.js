@@ -159,20 +159,6 @@ function swordSlash(q2) {
   });
   if (hit && q2.o && (q2.o.ctrl === 'p1' || q2.o.ctrl === 'p2')) G.shake = Math.min(1, G.shake + 0.12 + hit * 0.03);
 }
-const SC_DIFF = { normal: 1, dificil: 1.5, pesadilla: 2.5 };
-function comboMul() {
-  return 1 + Math.min(9, Math.floor((G.combo || 0) / 20) * 0.5);
-}
-function stageMul() {
-  return G.mode === 'libre' ? 1 + 0.5 * ((G.wave || 1) - 1) : 1 + 0.5 * G.ridx;
-}
-function scoreMul() {
-  return comboMul() * stageMul() * (SC_DIFF[G.diffKey] || 1);
-}
-function addScore(base) {
-  if (!G) return;
-  G.score = (G.score || 0) + base * scoreMul();
-}
 function teamLuck() {
   let m = 0;
   for (const q of players) if (q.ctrl !== 'net') m = Math.max(m, q.luck || 0);
