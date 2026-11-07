@@ -36,7 +36,7 @@ function asLoad() {
       (k) =>
         new Promise((res) => {
           L.load(
-            'assets/' + k + '.json',
+            'assets/' + k + '.glb',
             (g) => {
               asFix(g.scene);
               AS.g[k] = g;

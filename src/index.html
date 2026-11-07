@@ -3,8 +3,55 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-    <title>Bonk de los Dioses</title>
+    <title>Bonk de los Dioses · Roguelike 3D gratis en el navegador</title>
+    <meta
+      name="description"
+      content="Elige entre 91 dioses de 14 mitologías y sobrevive a hordas en un roguelike 3D. Gratis, sin descargas, en solitario o con amigos."
+    />
+    <link rel="canonical" href="https://bonk-de-los-dioses.vercel.app/" />
+    <meta name="theme-color" content="#0d101b" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Bonk de los Dioses" />
+    <meta property="og:locale" content="es_ES" />
+    <meta property="og:url" content="https://bonk-de-los-dioses.vercel.app/" />
+    <meta property="og:title" content="Bonk de los Dioses · Roguelike 3D gratis" />
+    <meta
+      property="og:description"
+      content="91 dioses de 14 mitologías contra hordas sin fin. Juega gratis en el navegador, solo o con amigos."
+    />
+    <meta property="og:image" content="https://bonk-de-los-dioses.vercel.app/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Portada de Bonk de los Dioses con Zeus y los modos de juego" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Bonk de los Dioses · Roguelike 3D gratis" />
+    <meta
+      name="twitter:description"
+      content="91 dioses de 14 mitologías contra hordas sin fin. Juega gratis en el navegador, solo o con amigos."
+    />
+    <meta name="twitter:image" content="https://bonk-de-los-dioses.vercel.app/og-image.jpg" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "VideoGame",
+        "name": "Bonk de los Dioses",
+        "url": "https://bonk-de-los-dioses.vercel.app/",
+        "description": "Roguelike 3D de supervivencia con 91 dioses de 14 mitologías. Gratis en el navegador.",
+        "genre": ["Roguelike", "Acción", "Supervivencia"],
+        "gamePlatform": "Navegador web",
+        "applicationCategory": "Game",
+        "inLanguage": "es",
+        "playMode": ["SinglePlayer", "CoOp", "MultiPlayer"],
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+      }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&family=Press+Start+2P&display=swap"
@@ -22,14 +69,17 @@
         <div class="psec">
           <label for="pfNameIn">Nombre en el juego</label>
           <div class="prow">
-            <input id="pfNameIn" maxlength="24" autocomplete="off" /><button class="btn green" id="pfSave">
+            <input id="pfNameIn" minlength="2" maxlength="24" required autocomplete="nickname" /><button
+              class="btn green"
+              id="pfSave"
+            >
               Guardar
             </button>
           </div>
           <small class="pmsg" id="pfNameMsg"></small>
         </div>
         <div class="psec">
-          <label>Tu código de amigo</label>
+          <span class="plabel">Tu código de amigo</span>
           <div class="prow">
             <b class="pcode" id="pfCode">······</b><button class="btn" id="pfCopyCode">Copiar código</button
             ><button class="btn" id="pfCopyLink">Copiar enlace</button>
@@ -39,26 +89,37 @@
         <div class="psec">
           <label for="pfAddIn">Añadir un amigo</label>
           <div class="prow">
-            <input id="pfAddIn" maxlength="8" placeholder="Código de 6 letras" autocomplete="off" /><button
-              class="btn blue"
-              id="pfAdd"
-            >
-              Añadir
-            </button>
+            <input
+              id="pfAddIn"
+              maxlength="6"
+              pattern="[A-Za-z0-9]{6}"
+              placeholder="Código de 6 letras"
+              autocomplete="off"
+              autocapitalize="characters"
+              spellcheck="false"
+            /><button class="btn blue" id="pfAdd">Añadir</button>
           </div>
           <small class="pmsg" id="pfAddMsg"></small>
         </div>
         <div class="psec">
-          <label>Amigos</label>
+          <span class="plabel">Amigos</span>
           <ul class="pfl" id="pfList"></ul>
           <div id="pfReqBox" hidden>
-            <label style="margin-top: 10px">Te añadieron</label>
+            <span class="plabel" style="margin-top: 10px">Te añadieron</span>
             <ul class="pfl" id="pfReq"></ul>
           </div>
         </div>
         <div class="prow pfoot">
           <button class="btn" id="pfInvite">Invitar a una sala</button><span class="grow"></span
           ><button class="btn red" id="pfLogout">Cerrar sesión</button>
+        </div>
+        <div class="pdanger">
+          <button class="linkbtn" id="pfDelete">Borrar mi cuenta y mis datos</button>
+          <small class="pmsg" id="pfDelMsg"></small>
+          <small class="plegal"
+            ><a href="/privacidad">Privacidad</a> · <a href="/terminos">Términos</a> ·
+            <a href="/privacidad#cookies" data-cookie-prefs>Cookies</a></small
+          >
         </div>
       </div>
     </div>
@@ -72,11 +133,11 @@
       </div>
     </div>
     <div id="app">
-      <canvas id="c" tabindex="0"></canvas>
+      <canvas id="c" tabindex="0" role="img" aria-label="Escenario del juego en 3D"></canvas>
       <div id="focusHint" hidden>
         <b>Haz clic aquí para jugar</b><span>El teclado se activa al tocar el juego</span>
       </div>
-      <canvas id="ov"></canvas>
+      <canvas id="ov" aria-hidden="true"></canvas>
       <div id="flash"></div>
       <div id="nogl" hidden>
         Este juego necesita WebGL y tu navegador no lo tiene disponible. Prueba con otro navegador o activa la
@@ -85,7 +146,9 @@
 
       <div id="hud" hidden>
         <div class="hudcard">
-          <div class="port"><canvas id="hudPort"></canvas><span class="lvb" id="hudLv">Nv. 1</span></div>
+          <div class="port">
+            <canvas id="hudPort" aria-hidden="true"></canvas><span class="lvb" id="hudLv">Nv. 1</span>
+          </div>
           <div class="hudinfo">
             <div class="hudname"><span id="hudName">Zeus</span><span class="pill" id="hudPan">Griega</span></div>
             <div class="hb">
@@ -101,7 +164,7 @@
           </div>
         </div>
         <div id="p2card" hidden>
-          <canvas id="p2Port"></canvas>
+          <canvas id="p2Port" aria-hidden="true"></canvas>
           <div>
             <b id="p2Name"></b>
             <div class="bar"><i id="p2hp"></i></div>
@@ -194,13 +257,14 @@
         </div>
         <div class="hub2">
           <div class="hl">
-            <div class="hlogo2">
+            <h1 class="hlogo2">
               <span class="l1">Bonk</span><span class="l2">de los <em>Dioses</em></span
               ><span class="lv">RAGNARÖK</span>
-            </div>
+            </h1>
+            <p class="htag">Gratis en tu navegador, sin descargas. <b>Pulsa Jugar</b> y empieza ya.</p>
             <div class="tiles">
-              <button class="htile ht-play" id="hEnter">
-                <canvas id="tPlayCv"></canvas
+              <button class="htile ht-play" id="hEnter" aria-label="Jugar ahora gratis">
+                <canvas id="tPlayCv" aria-hidden="true"></canvas
                 ><span class="tt"><b>Jugar</b><small id="tPlaySub">Modo historia</small></span>
               </button>
               <div class="tcol">
@@ -212,7 +276,8 @@
                 </button>
               </div>
               <button class="htile ht-local" data-party="coop">
-                <canvas id="tLocalA"></canvas><canvas id="tLocalB"></canvas><b>Local 2J</b><small>Mismo teclado</small>
+                <canvas id="tLocalA" aria-hidden="true"></canvas><canvas id="tLocalB" aria-hidden="true"></canvas
+                ><b>Local 2J</b><small>Mismo teclado</small>
               </button>
               <button class="htile ht-event" id="hEvent"></button>
               <button class="htile ht-daily" id="hDaily"></button>
@@ -280,6 +345,10 @@
                 ><b>Clan</b><small id="ts-clan"></small>
               </button>
             </div>
+            <p class="hguest" id="hGuest" hidden>
+              Juegas como invitado. <button class="linkbtn" id="hGuestLogin">Entra con Google</button> para guardar tu
+              progreso en la nube, añadir amigos y salir en la clasificación.
+            </p>
           </div>
           <aside class="hr">
             <div class="lbp">
@@ -294,6 +363,11 @@
             </div>
           </aside>
         </div>
+        <footer class="hfoot">
+          <a href="/privacidad">Privacidad</a><a href="/terminos">Términos</a
+          ><a href="/privacidad#cookies" data-cookie-prefs>Cookies</a
+          ><a href="https://github.com/adrijonas16/bonk-de-los-dioses" target="_blank" rel="noopener">Código</a>
+        </footer>
       </div>
       <div class="ov" id="menu">
         <header class="topbar">
@@ -309,14 +383,14 @@
           <div class="me">
             <span class="onl" id="onl">Conectando…</span
             ><span class="coin"><i class="cn"></i><span id="coins">0</span></span
-            ><canvas id="pava"></canvas><span id="pname">Jugador</span>
+            ><canvas id="pava" aria-hidden="true"></canvas><span id="pname">Jugador</span>
           </div>
         </header>
 
         <section class="tab" id="tab-jugar">
           <div class="playgrid">
             <div class="box hero">
-              <div class="art"><canvas id="heroCv"></canvas></div>
+              <div class="art"><canvas id="heroCv" role="img" aria-label="Retrato del dios elegido"></canvas></div>
               <div class="body">
                 <h2><span id="heroName">Zeus</span><span class="pill" id="heroPan">Griega</span></h2>
                 <div class="ttl" id="heroTitle"></div>
@@ -399,7 +473,7 @@
               </div>
             </div>
             <div class="box hero">
-              <div class="art"><canvas id="gdetCv"></canvas></div>
+              <div class="art"><canvas id="gdetCv" role="img" aria-label="Retrato del dios seleccionado"></canvas></div>
               <div class="body">
                 <h2><span id="gdetName"></span><span class="pill" id="gdetPan"></span></h2>
                 <div class="ttl" id="gdetTitle"></div>
@@ -477,11 +551,14 @@
               <div class="body">
                 <div class="bigval" id="clanName" style="font-size: 30px">Sin clan</div>
                 <div style="display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap">
-                  <input id="clanIn" maxlength="20" placeholder="Nombre del clan" autocomplete="off" /><button
-                    class="btn green"
-                    id="clanJoin"
-                  >
-                    Unirme o crear</button
+                  <input
+                    id="clanIn"
+                    minlength="2"
+                    maxlength="20"
+                    placeholder="Nombre del clan"
+                    aria-label="Nombre del clan"
+                    autocomplete="off"
+                  /><button class="btn green" id="clanJoin">Unirme o crear</button
                   ><button class="btn red" id="clanLeave">Salir del clan</button>
                 </div>
                 <p class="mut" style="font-size: 13px">
@@ -509,7 +586,9 @@
       <div class="ov dim" id="pause" hidden>
         <div class="sheet">
           <div class="phead">
-            <div class="port"><canvas id="psPort"></canvas><span class="lvb" id="psLv">Nv. 1</span></div>
+            <div class="port">
+              <canvas id="psPort" aria-hidden="true"></canvas><span class="lvb" id="psLv">Nv. 1</span>
+            </div>
             <div>
               <div class="pctx"><span class="pill">PAUSA</span><span id="psCtx"></span></div>
               <div class="pname"><span id="psName"></span><span class="pill" id="psPan"></span></div>
@@ -553,7 +632,7 @@
       <div class="ov dim" id="end" hidden>
         <div class="sheet" style="max-width: 980px">
           <div class="phead">
-            <div class="port"><canvas id="enPort"></canvas></div>
+            <div class="port"><canvas id="enPort" aria-hidden="true"></canvas></div>
             <div>
               <div class="pctx"><span class="pill" id="enEyebrow">Fin</span></div>
               <div class="pname" id="enTitle"></div>

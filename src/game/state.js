@@ -228,6 +228,7 @@ function startRealm(key) {
   G.realmScore = 0;
   G.realm = key;
   G.rt = 0;
+  if (!G.visited.length) track('game_start', { mode: cfg.mode, difficulty: cfg.diff || 'normal', realm: key });
   G.visited.push(key);
   G.portals = null;
   G.bosses = [];

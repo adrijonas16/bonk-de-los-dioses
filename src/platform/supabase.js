@@ -40,6 +40,7 @@
     sb.auth.onAuthStateChange((ev) => {
       if (ev === 'SIGNED_IN' && !window.__sbIn) {
         window.__sbIn = true;
+        track('login', { method: 'Google' });
       }
     });
 
@@ -59,10 +60,10 @@
     },
     setName: async (name) => {
       const id = await uidP();
-      const clean = String(name || '')
-        .trim()
-        .slice(0, 24);
-      if (!id || clean.length < 2) throw new Error('El nombre debe tener al menos 2 letras.');
+      const check = checkPlayerName(name);
+      if (!id) throw new Error('Inicia sesión para cambiar tu nombre.');
+      if (!check.ok) throw new Error(check.msg);
+      const clean = check.value;
       await sel(
         sb.from('profiles').update({ name: clean, updated_at: new Date().toISOString() }).eq('id', id).select('id')
       );
@@ -90,6 +91,17 @@
           .upsert({ user_id: id, friend_id: fid }, { onConflict: 'user_id,friend_id', ignoreDuplicates: true })
           .select('friend_id')
       );
+    },
+    // borra la cuenta y, en cascada, perfil, progreso, puntuaciones y amigos
+    deleteAccount: async () => {
+      const { error } = await sb.rpc('delete_my_account');
+      if (error) throw error;
+      try {
+        Object.keys(localStorage)
+          .filter((k) => /^(bonk|sb-)/.test(k))
+          .forEach((k) => localStorage.removeItem(k));
+      } catch (err) {}
+      await sb.auth.signOut().catch(() => {});
     },
     removeFriend: async (fid) => {
       const id = await uidP();

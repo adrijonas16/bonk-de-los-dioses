@@ -6,6 +6,7 @@
     bar = $('bootBar'),
     txt = $('bootTxt'),
     t0 = Date.now();
+  let assetsAt = 0; // cuándo terminaron los modelos
   if (!boot) return;
   const total = Object.keys(REALMS).length;
   const tick = () => {
@@ -16,7 +17,10 @@
     bar.style.width = Math.round(k * 100) + '%';
     txt.textContent =
       assets < 1 ? `Cargando dioses y monstruos… ${Math.round(assets * 100)} %` : 'Preparando los reinos…';
-    if ((assets >= 1 && prevDone) || Date.now() - t0 > 45000) {
+    if (assets >= 1 && !assetsAt) assetsAt = Date.now();
+    // las miniaturas que falten se siguen generando detrás: en equipos lentos no hacemos esperar más de 4 s por ellas
+    const prevWaitOver = assetsAt && Date.now() - assetsAt > 4000;
+    if ((assets >= 1 && (prevDone || prevWaitOver)) || Date.now() - t0 > 45000) {
       bar.style.width = '100%';
       document.body.classList.remove('booting');
       boot.classList.add('out');

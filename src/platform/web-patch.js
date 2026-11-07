@@ -133,8 +133,10 @@
   $id('pfCopyCode').onclick = (e) => me && me.code && copy(me.code, e.target);
   $id('pfCopyLink').onclick = (e) => me && me.code && copy(`${location.origin}/?amigo=${me.code}`, e.target);
   $id('pfAdd').onclick = async () => {
-    const code = $id('pfAddIn').value.trim().toUpperCase();
-    if (code.length < 4) return msg('pfAddMsg', 'Escribe el código de tu amigo.', 'err');
+    const check = checkFriendCode($id('pfAddIn').value);
+    if (!check.ok) return msg('pfAddMsg', check.msg, 'err');
+    const code = check.value;
+    if (me && code === me.code) return msg('pfAddMsg', 'Ese es tu propio código.', 'err');
     try {
       const p = await SBX.findByCode(code);
       if (!p) return msg('pfAddMsg', 'No existe ningún jugador con ese código.', 'err');
@@ -157,6 +159,25 @@
     copy(`${location.origin}/?sala=${code}`, e.target);
   };
   $id('pfLogout').onclick = () => SB_LOGOUT();
+  // dos pulsaciones para borrar: evita borrados por accidente sin usar diálogos del navegador
+  let deleteArmed = 0;
+  $id('pfDelete').onclick = async () => {
+    if (Date.now() - deleteArmed > 6000) {
+      deleteArmed = Date.now();
+      $id('pfDelete').textContent = 'Pulsa otra vez para borrar todo (no se puede deshacer)';
+      return;
+    }
+    $id('pfDelete').disabled = true;
+    msg('pfDelMsg', 'Borrando…');
+    try {
+      await SBX.deleteAccount();
+      msg('pfDelMsg', 'Cuenta borrada.', 'ok');
+      setTimeout(() => location.replace('/'), 800);
+    } catch (e) {
+      $id('pfDelete').disabled = false;
+      msg('pfDelMsg', (e && e.message) || 'No se pudo borrar la cuenta.', 'err');
+    }
+  };
 
   // enlaces ?amigo=CODIGO y ?sala=CODIGO: se usan cuando el jugador ya inició sesión
   if (linkCode || linkSala) {

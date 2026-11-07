@@ -56,7 +56,7 @@
   vertical-align: middle;
 }
 .pill.rival {
-  background: var(--red);
+  background: #d92a3d; /* rojo algo más oscuro: texto blanco con contraste 4,8:1 */
 }
 .pill.aliado {
   background: var(--gold);
@@ -187,6 +187,10 @@
 .seg button[aria-pressed='true'] {
   border-color: var(--th2);
   background: color-mix(in srgb, var(--th2) 22%, var(--card2));
+}
+/* sobre el fondo del botón elegido el gris normal no llega a contraste 4,5:1 */
+.seg button[aria-pressed='true'] small {
+  color: #d7dcf2;
 }
 input,
 select {

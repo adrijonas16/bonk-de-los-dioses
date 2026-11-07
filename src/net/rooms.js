@@ -7,10 +7,9 @@ function randCode() {
 }
 async function joinSala(code, host) {
   if (!NET.room) return 'Sin conexión: inicia sesión para jugar online.';
-  code = String(code || '')
-    .toLowerCase()
-    .replace(/[^a-z0-9]/g, '');
-  if (code.length < 4) return 'El código tiene que tener al menos 4 letras o números.';
+  const check = checkRoomCode(code);
+  if (!check.ok) return check.msg;
+  code = check.value;
   await leaveSala();
   try {
     NET.sala = await NET.room.join('sala-' + code);

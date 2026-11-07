@@ -294,6 +294,7 @@ function endGame(win) {
       document.exitPointerLock();
     } catch (err) {}
   if (G.realm) G.mapScore[G.realm] = Math.max(G.mapScore[G.realm] || 0, G.realmScore);
+  track('game_end', { win: !!win, score: Math.round(G.score || 0), level: G.level, mode: cfg.mode });
   const evK = weekEvent().realm,
     evOn = G.visited.includes(evK);
   const coins = Math.round((G.money + G.goldTotal * 0.2 + (win ? 500 : 0) + G.level * 5) * DF().rew * (evOn ? 1.5 : 1));

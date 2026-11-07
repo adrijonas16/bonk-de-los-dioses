@@ -45,7 +45,7 @@ function renderOnline() {
             `<li><span class="dot"></span><b>${esc(nameOf(s.by, 'Jugador'))}</b><span>${esc(REALMS[s.map].name)} · ${s.mode === 'libre' ? 'Supervivencia' : 'Clásico'} · ${s.n} jug.</span><button class="btn sm green" data-join="${esc(s.code)}">Unirme</button></li>`
         )
         .join('') || '<li class="mut">No hay salas abiertas ahora mismo.</li>';
-    box.innerHTML = `<div class="sala"><div class="row"><button class="btn green" id="mkSala">Crear sala</button><input id="codeIn" maxlength="8" placeholder="Código" autocomplete="off"><button class="btn" id="joinSala">Unirme</button></div>${UI.msg ? `<p class="err">${esc(UI.msg)}</p>` : ''}<div class="sub">Salas abiertas</div><ul class="plist">${open}</ul></div>`;
+    box.innerHTML = `<div class="sala"><div class="row"><button class="btn green" id="mkSala">Crear sala</button><input id="codeIn" maxlength="8" pattern="[A-Za-z0-9]{4,8}" placeholder="Código" aria-label="Código de sala" autocomplete="off" spellcheck="false"><button class="btn" id="joinSala">Unirme</button></div>${UI.msg ? `<p class="err">${esc(UI.msg)}</p>` : ''}<div class="sub">Salas abiertas</div><ul class="plist">${open}</ul></div>`;
     $('mkSala').onclick = async () => {
       UI.msg = await joinSala(randCode(), true);
       renderOnline();

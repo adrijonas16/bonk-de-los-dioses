@@ -64,6 +64,10 @@
     "group": "game"
   },
   {
+    "file": "core/validate.js",
+    "group": "game"
+  },
+  {
     "file": "core/pixel-draw.js",
     "group": "game"
   },

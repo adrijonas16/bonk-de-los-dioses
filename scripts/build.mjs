@@ -21,6 +21,9 @@ const SUPABASE_ANON_KEY =
   process.env.SUPABASE_ANON_KEY ||
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBxdmtkYWltaXhnZHpraGl5Z2tqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM2NTAzNDEsImV4cCI6MjEwOTIyNjM0MX0.oPHb5YJPja28hXrQcwzGf7dAOSbiFPtcrq-BHS8rDu0';
 
+// Google Analytics 4: ID de medición público (G-XXXX). Sin él no se carga analítica ni se pide consentimiento.
+const GA4_ID = /^G-[A-Z0-9]{4,16}$/.test(process.env.GA4_ID || '') ? process.env.GA4_ID : '';
+
 function vendorBundle() {
   const three = path.dirname(require.resolve('three/package.json'));
   const files = [
@@ -40,7 +43,11 @@ function gameUnits() {
   const part = (f) => `// ---- ${f}\n${read(path.join(SRC, f))}`;
   const units = [];
   const config = `window.SB_CONFIG={url:${JSON.stringify(SUPABASE_URL)},anonKey:${JSON.stringify(SUPABASE_ANON_KEY)}};`;
-  units.push({ name: 'platform', code: `'use strict';\n${config}\n${part('platform/supabase.js')}` });
+  const site = `window.BONK_CFG={ga4:${JSON.stringify(GA4_ID)}};`;
+  units.push({
+    name: 'platform',
+    code: `'use strict';\n${config}\n${site}\n${part('platform/consent.js')}\n${part('platform/supabase.js')}`,
+  });
   for (const m of manifest) {
     const name = path.dirname(m.file).replace(/\//g, '-');
     let u = units[units.length - 1];
@@ -93,7 +100,7 @@ async function main() {
   fs.writeFileSync(path.join(DIST, 'index.html'), html);
   const total = scripts.reduce((n, f) => n + fs.statSync(path.join(DIST, f)).size, 0);
   console.log(
-    `dist/ listo${dev ? ' (dev)' : ''}: ${scripts.length} scripts, ${Math.round(total / 1024)} KB de JS, ${Math.round(css.length / 1024)} KB de CSS`
+    `dist/ listo${dev ? ' (dev)' : ''}: ${scripts.length} scripts, ${Math.round(total / 1024)} KB de JS, ${Math.round(css.length / 1024)} KB de CSS, GA4 ${GA4_ID || 'desactivado'}`
   );
 }
 

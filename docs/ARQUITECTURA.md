@@ -55,3 +55,9 @@ Pasar a módulos ES con imports explícitos, en este orden:
 2. Mover el estado mutable (`state`, `G`, listas) a un objeto `game` que se importa, para que nadie reasigne globales.
 3. Ir convirtiendo carpeta a carpeta con el build pasando a esbuild en modo bundle.
 Hacerlo como una tarea propia, nunca mezclado con otros cambios.
+
+## Web pública
+- `public/` se copia tal cual a `dist/`: modelos (`assets/*.glb`), iconos, `og-image.jpg`, `robots.txt`, `sitemap.xml`, `404.html`, `privacidad.html` y `terminos.html` (Vercel sirve `/privacidad` sin `.html`).
+- `vercel.json` define las cabeceras de seguridad (CSP, HSTS, etc.). Si el juego necesita un dominio externo nuevo, añádelo a la CSP o el navegador lo bloqueará.
+- `src/platform/consent.js` pide consentimiento y solo entonces carga Google Analytics 4 (`GA4_ID` en el build). Eventos: `login`, `game_start`, `game_end` con `track()`.
+- `src/core/validate.js` valida nombre, código de amigo, clan y código de sala; la base de datos repite las mismas reglas (migración `validacion_antispam`).

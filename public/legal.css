@@ -1,0 +1,136 @@
+/* páginas estáticas: privacidad, términos y 404 */
+:root {
+  color-scheme: dark;
+  --bg: #0d101b;
+  --panel: #161a2b;
+  --txt: #eef1ff;
+  --mut: #b4bbdb;
+  --gold: #ffc23a;
+  --green: #36c46a;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(232, 181, 62, 0.14), transparent 60%), var(--bg);
+  color: var(--txt);
+  font: 16px/1.65 'Nunito', 'Segoe UI', system-ui, sans-serif;
+}
+a {
+  color: var(--gold);
+}
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 2px;
+}
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 18px 20px;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--txt);
+  font-weight: 900;
+  font-size: 18px;
+  text-decoration: none;
+}
+.brand img {
+  width: 36px;
+  height: 36px;
+}
+.cta {
+  display: inline-block;
+  padding: 10px 18px;
+  border-radius: 12px;
+  background: var(--green);
+  color: #06210f;
+  font-weight: 900;
+  text-decoration: none;
+  box-shadow: 0 4px 0 #1f7a41;
+}
+.cta:hover {
+  filter: brightness(1.08);
+}
+main {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 8px 20px 40px;
+}
+article {
+  background: var(--panel);
+  border-radius: 20px;
+  padding: clamp(18px, 4vw, 36px);
+  box-shadow: 0 0 0 2px rgba(255, 194, 58, 0.18);
+}
+h1 {
+  margin: 0 0 4px;
+  font-size: clamp(28px, 5vw, 40px);
+  line-height: 1.15;
+}
+h2 {
+  margin: 32px 0 8px;
+  font-size: 21px;
+  color: var(--gold);
+}
+.meta,
+small {
+  color: var(--mut);
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  margin: 8px 0;
+}
+th,
+td {
+  text-align: left;
+  vertical-align: top;
+  padding: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+th {
+  color: var(--gold);
+}
+.tablewrap {
+  overflow-x: auto;
+}
+footer {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 20px 32px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  font-size: 14px;
+  font-weight: 800;
+}
+footer a {
+  color: #d5daf2;
+}
+.nf {
+  text-align: center;
+  padding: 10vh 20px;
+}
+.nf .big {
+  font-size: clamp(72px, 18vw, 140px);
+  font-weight: 900;
+  line-height: 1;
+  color: #ffd34d;
+  -webkit-text-stroke: 3px #5a2a00;
+  paint-order: stroke fill;
+  text-shadow: 0 7px 0 #5a2a00;
+}
+.nf p {
+  color: var(--mut);
+  font-size: 18px;
+}

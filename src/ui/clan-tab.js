@@ -24,11 +24,14 @@ async function renderClan() {
       .join('') || '<li class="mut">Juega una partida para aparecer en tu clan.</li>';
 }
 $('clanJoin').onclick = async () => {
-  const v = $('clanIn').value.trim();
-  if (!v) return;
-  await setClan(v);
+  const check = checkClanName($('clanIn').value);
+  $('clanIn').setCustomValidity(check.msg);
+  $('clanIn').reportValidity();
+  if (!check.ok) return;
+  await setClan(check.value);
   renderClan();
 };
+$('clanIn').oninput = () => $('clanIn').setCustomValidity('');
 $('clanLeave').onclick = async () => {
   await setClan('');
   renderClan();

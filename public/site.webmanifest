@@ -1,0 +1,16 @@
+{
+  "name": "Bonk de los Dioses",
+  "short_name": "Bonk Dioses",
+  "description": "Roguelike 3D gratis en el navegador con dioses de 14 mitologías.",
+  "lang": "es",
+  "start_url": "/",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#0d101b",
+  "theme_color": "#0d101b",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

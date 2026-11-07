@@ -1,0 +1,122 @@
+/* ---- web pública: llamada a jugar, pie con enlaces legales, banner de cookies ---- */
+h1.hlogo2 {
+  font-size: inherit;
+}
+.htag {
+  margin: -6px 0 14px 8px;
+  font-size: 15px;
+  font-weight: 800;
+  color: #fff;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+}
+.htag b {
+  color: var(--gold);
+}
+.hguest {
+  margin: 12px 0 0;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(10, 12, 22, 0.78);
+  color: var(--txt);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.45;
+  max-width: 620px;
+}
+.linkbtn {
+  border: none;
+  background: none;
+  padding: 0;
+  font: inherit;
+  font-weight: 900;
+  color: var(--gold);
+  text-decoration: underline;
+  cursor: pointer;
+}
+.hfoot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px 18px;
+  padding: 4px 16px 18px;
+  font-size: 12px;
+  font-weight: 800;
+}
+.hfoot a,
+.plegal a {
+  color: #d5daf2;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+}
+.hfoot a:hover,
+.plegal a:hover {
+  color: #fff;
+}
+#profileOv .pdanger {
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  margin-top: 6px;
+  padding-top: 10px;
+  display: grid;
+  gap: 6px;
+  justify-items: start;
+}
+#profileOv .pdanger .linkbtn {
+  color: #ff8a95;
+  font-size: 13px;
+}
+#profileOv .plegal {
+  font-size: 12px;
+  color: var(--mut);
+}
+#cookieBar {
+  position: fixed;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  z-index: 90;
+  width: min(760px, calc(100% - 20px));
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: #161a2b;
+  color: var(--txt);
+  box-shadow:
+    0 8px 0 rgba(0, 0, 0, 0.35),
+    0 0 0 2px rgba(255, 194, 58, 0.35);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.45;
+}
+#cookieBar[hidden] {
+  display: none;
+}
+#cookieBar p {
+  margin: 0;
+  flex: 1;
+}
+#cookieBar p b {
+  color: var(--gold);
+  margin-right: 4px;
+}
+#cookieBar a {
+  color: var(--gold);
+}
+#cookieBar .cbtns {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+@media (max-width: 600px) {
+  #cookieBar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  #cookieBar .cbtns > * {
+    flex: 1;
+  }
+  .htag {
+    font-size: 13px;
+    margin-left: 0;
+  }
+}

@@ -9,9 +9,11 @@ function renderHome() {
     const nm = NET.myName || 'Tu cuenta';
     acc.innerHTML = `<span class="hcoin"><i class="cn"></i>${fmtN(PROF.coins)}</span><span class="hav">${esc(nm.slice(0, 1).toUpperCase())}</span><span>${esc(nm)}</span>`;
     $('hGoogle').hidden = true;
+    $('hGuest').hidden = true;
   } else {
     acc.innerHTML = `<span class="hcoin"><i class="cn"></i>${fmtN(PROF.coins)}</span>`;
     $('hGoogle').hidden = !ready;
+    $('hGuest').hidden = !ready || !window.SB_LOGIN;
   }
   const g = GOD[PROF.god];
   // se vuelve a dibujar cuando cambia el dios o cuando ya hay modelos 3D (antes solo había el dibujo pixel art)
@@ -46,7 +48,7 @@ function homeEvent() {
     h = Math.floor((ms % 864e5) / 36e5),
     m = Math.floor((ms % 36e5) / 6e4);
   const el = $('hEvent');
-  el.innerHTML = `<canvas width="400" height="100"></canvas><div class="evb"><div class="evt">¡EVENTO! Termina en ${d ? d + ' d ' : ''}${h} h ${m} min</div><b>${esc(r.name)}: dracmas ×1,5</b><small>Toda partida que pase por este reino paga un 50 % más</small></div>`;
+  el.innerHTML = `<canvas width="400" height="100" aria-hidden="true"></canvas><div class="evb"><div class="evt">¡EVENTO! Termina en ${d ? d + ' d ' : ''}${h} h ${m} min</div><b>${esc(r.name)}: dracmas ×1,5</b><small>Toda partida que pase por este reino paga un 50 % más</small></div>`;
   const c = el.querySelector('canvas'),
     gx = c.getContext('2d');
   const gr = gx.createLinearGradient(0, 0, 0, 100);
@@ -151,6 +153,7 @@ function openHome() {
   HOME.shown = true;
   renderHome();
 }
+$('hGuestLogin').onclick = () => window.SB_LOGIN && SB_LOGIN();
 $('hEnter').onclick = () => {
   cfg.mode = 'ragnarok';
   closeHome();

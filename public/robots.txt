@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://bonk-de-los-dioses.vercel.app/sitemap.xml

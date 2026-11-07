@@ -64,9 +64,7 @@ async function loadBoard(force) {
   }
 }
 async function setClan(name) {
-  PROF.clan = String(name || '')
-    .trim()
-    .slice(0, 20);
+  PROF.clan = cleanText(name, 20);
   saveProfile();
   if (NET.db && NET.uid) {
     try {
